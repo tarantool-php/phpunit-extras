@@ -11,7 +11,7 @@
 
 declare(strict_types=1);
 
-namespace Tarantool\PhpUnit\Tests\Annotation\Requirement;
+namespace Tarantool\PhpUnit\Tests\Annotation\Processor;
 
 use PHPUnit\Framework\TestCase;
 use Tarantool\Client\Request\EvaluateRequest;
