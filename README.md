@@ -1,6 +1,6 @@
 # PHPUnit Extras
 
-![Continuous Integration](https://github.com/tarantool/phpunit-extras/workflows/Continuous%20Integration/badge.svg)
+![Continuous Integration](https://github.com/tarantool-php/phpunit-extras/workflows/Continuous%20Integration/badge.svg)
 
 
 ## Installation
