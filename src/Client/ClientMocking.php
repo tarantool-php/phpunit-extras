@@ -28,5 +28,5 @@ trait ClientMocking
         return $this->getMockClientBuilder()->build();
     }
 
-    abstract protected function prophesize($classOrInterface = null) : ObjectProphecy;
+    abstract protected function prophesize(?string $classOrInterface = null) : ObjectProphecy;
 }
