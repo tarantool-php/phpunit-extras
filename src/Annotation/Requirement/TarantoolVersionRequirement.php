@@ -53,7 +53,7 @@ final class TarantoolVersionRequirement implements Requirement
         }
 
         $version = $this->client->call('box.info')[0]['version'];
-        // normalizes 2.2.1-3-g878e2a42c to 2.2.1.3
+        // normalize 2.2.1-3-g878e2a42c to 2.2.1.3
         $version = preg_replace('/-(\d+)-[^-]+$/', '.$1', $version);
 
         return $this->version = $version;
