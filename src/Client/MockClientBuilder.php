@@ -53,11 +53,15 @@ final class MockClientBuilder
     }
 
     /**
-     * @param Request|Constraint $request
+     * @param Request|Constraint|int $request
      * @param Response ...$responses
      */
     public function shouldHandle($request, ...$responses) : self
     {
+        if (is_int($request)) {
+            $request = new IsRequestType($request);
+        }
+
         $this->requests->attach($request, $responses);
 
         return $this;

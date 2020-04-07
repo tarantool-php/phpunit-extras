@@ -19,7 +19,6 @@ use Symfony\Component\ExpressionLanguage\ExpressionLanguage;
 use Tarantool\Client\RequestTypes;
 use Tarantool\PhpUnit\Client\ClientMocking;
 use Tarantool\PhpUnit\Client\DummyFactory;
-use Tarantool\PhpUnit\Client\IsRequestType;
 use Tarantool\PhpUnit\Expectation\ExpressionContext\RequestCountContext;
 use Tarantool\PhpUnit\Expectation\ExpressionContext\RequestCounter;
 
@@ -31,7 +30,7 @@ final class RequestCountContextTest extends TestCase
     {
         $mockClient = $this->getMockClientBuilder()
             ->shouldHandle(
-                new IsRequestType(RequestTypes::EVALUATE),
+                RequestTypes::EVALUATE,
                 DummyFactory::createResponseFromData([2]),
                 DummyFactory::createResponseFromData([3])
             )->build();
