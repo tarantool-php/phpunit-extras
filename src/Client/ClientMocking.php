@@ -13,20 +13,17 @@ declare(strict_types=1);
 
 namespace Tarantool\PhpUnit\Client;
 
-use Prophecy\Prophecy\ObjectProphecy;
 use Tarantool\Client\Client;
 
 trait ClientMocking
 {
     protected function getMockClientBuilder() : MockClientBuilder
     {
-        return new MockClientBuilder(\Closure::fromCallable([$this, 'prophesize']));
+        return new MockClientBuilder($this);
     }
 
     protected function createMockClient() : Client
     {
         return $this->getMockClientBuilder()->build();
     }
-
-    abstract protected function prophesize(?string $classOrInterface = null) : ObjectProphecy;
 }

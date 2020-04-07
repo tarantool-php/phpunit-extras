@@ -15,11 +15,11 @@ namespace Tarantool\PhpUnit\Tests\Expectation\ExpressionContext;
 
 use PHPUnit\Framework\TestCase;
 use PHPUnitExtras\Expectation\ExpressionContext;
-use Prophecy\Argument;
 use Symfony\Component\ExpressionLanguage\ExpressionLanguage;
 use Tarantool\Client\RequestTypes;
 use Tarantool\PhpUnit\Client\ClientMocking;
 use Tarantool\PhpUnit\Client\DummyFactory;
+use Tarantool\PhpUnit\Client\IsRequestType;
 use Tarantool\PhpUnit\Expectation\ExpressionContext\RequestCountContext;
 use Tarantool\PhpUnit\Expectation\ExpressionContext\RequestCounter;
 
@@ -31,7 +31,7 @@ final class RequestCountContextTest extends TestCase
     {
         $mockClient = $this->getMockClientBuilder()
             ->shouldHandle(
-                Argument::which('getType', RequestTypes::EVALUATE),
+                new IsRequestType(RequestTypes::EVALUATE),
                 DummyFactory::createResponseFromData([2]),
                 DummyFactory::createResponseFromData([3])
             )->build();

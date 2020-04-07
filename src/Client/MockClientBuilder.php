@@ -13,10 +13,9 @@ declare(strict_types=1);
 
 namespace Tarantool\PhpUnit\Client;
 
-use Prophecy\Argument;
-use Prophecy\Argument\Token\TokenInterface;
-use Prophecy\Prophecy\ObjectProphecy;
-use Prophecy\Prophet;
+use PHPUnit\Framework\Constraint\Constraint;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 use Tarantool\Client\Client;
 use Tarantool\Client\Connection\Connection;
 use Tarantool\Client\Handler\Handler;
@@ -26,8 +25,8 @@ use Tarantool\Client\Response;
 
 final class MockClientBuilder
 {
-    /** @var \Closure */
-    private $prophesize;
+    /** @var TestCase */
+    private $testCase;
 
     /** @var \SplObjectStorage<object, array<int, Response>> */
     private $requests;
@@ -38,21 +37,23 @@ final class MockClientBuilder
     /** @var Packer|null */
     private $packer;
 
-    public function __construct(\Closure $prophesize)
+    public function __construct(TestCase $testCase)
     {
-        $this->prophesize = $prophesize;
+        $this->testCase = $testCase;
         $this->requests = new \SplObjectStorage();
     }
 
     public static function buildDefault() : Client
     {
-        $self = new self(\Closure::fromCallable([new Prophet(), 'prophesize']));
+        /** @psalm-suppress PropertyNotSetInConstructor */
+        $self = new self(new class() extends TestCase {
+        });
 
         return $self->build();
     }
 
     /**
-     * @param Request|TokenInterface $request
+     * @param Request|Constraint $request
      * @param Response ...$responses
      */
     public function shouldHandle($request, ...$responses) : self
@@ -79,44 +80,45 @@ final class MockClientBuilder
     public function build() : Client
     {
         /** @var Handler $handler */
-        $handler = $this->createHandler()->reveal();
+        $handler = $this->createHandler();
 
         return new Client($handler);
     }
 
-    private function createHandler() : ObjectProphecy
+    private function createHandler() : MockObject
     {
-        $handler = ($this->prophesize)(Handler::class);
+        $handler = $this->createMock(Handler::class);
 
         $connection = $this->createConnection();
-        $handler->getConnection()->willReturn($connection);
+        $handler->method('getConnection')->willReturn($connection);
 
         $packer = $this->createPacker();
-        $handler->getPacker()->willReturn($packer);
+        $handler->method('getPacker')->willReturn($packer);
 
         $defaultResponse = DummyFactory::createEmptyResponse();
 
         if (!$this->requests->count()) {
-            $handler->handle(Argument::type(Request::class))->willReturn($defaultResponse);
+            $handler->method('handle')->willReturn($defaultResponse);
 
             return $handler;
         }
 
         foreach ($this->requests as $request) {
             if (!$responses = $this->requests->getInfo()) {
-                $handler->handle($request)->willReturn($defaultResponse);
+                $handler->method('handle')->with($request)->willReturn($defaultResponse);
                 continue;
             }
 
-            $handler->handle($request)->willReturn(...$responses)
-                ->shouldBeCalledTimes(\count($responses));
+            $handler->expects(TestCase::exactly(\count($responses)))
+                ->method('handle')->with($request)
+                ->willReturnOnConsecutiveCalls(...$responses);
         }
 
         return $handler;
     }
 
     /**
-     * @return Connection|ObjectProphecy
+     * @return Connection|MockObject
      */
     private function createConnection()
     {
@@ -124,11 +126,11 @@ final class MockClientBuilder
             return $this->connection;
         }
 
-        return ($this->prophesize)(Connection::class);
+        return $this->createMock(Connection::class);
     }
 
     /**
-     * @return Packer|ObjectProphecy
+     * @return Packer|MockObject
      */
     private function createPacker()
     {
@@ -136,6 +138,19 @@ final class MockClientBuilder
             return $this->packer;
         }
 
-        return ($this->prophesize)(Packer::class);
+        return $this->createMock(Packer::class);
+    }
+
+    /**
+     * @param class-string $originalClassName
+     */
+    private function createMock(string $originalClassName) : MockObject
+    {
+        return $this->testCase->getMockBuilder($originalClassName)
+            ->disableOriginalConstructor()
+            ->disableOriginalClone()
+            ->disableArgumentCloning()
+            ->disallowMockingUnknownTypes()
+            ->getMock();
     }
 }
