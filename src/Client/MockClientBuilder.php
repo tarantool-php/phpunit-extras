@@ -58,7 +58,7 @@ final class MockClientBuilder
      */
     public function shouldHandle($request, ...$responses) : self
     {
-        if (is_int($request)) {
+        if (\is_int($request)) {
             $request = new IsRequestType($request);
         }
 
