@@ -29,7 +29,7 @@ composer require --dev tarantool/phpunit-extras
 
 Besides the annotations provided by the package `rybakit/phpunit-extras`, the library is shipped
 with add-ons specific to Tarantool. The easiest way to enable them is by inheriting your test classes
-from the `Tarantool\PhpUnit\TestCase` class:
+from `Tarantool\PhpUnit\TestCase`:
 
 ```php
 use Tarantool\Client\Client;
@@ -185,7 +185,7 @@ To test that your code sends (or does not send) certain requests, the following 
  * `TestCase::expectNoRequestToBeCalled() : void`
 
 where `<REQUEST_NAME>` is the name of the request, for example `Call`, `Insert`, etc.
-These methods are part of the `Tarantool\PhpUnit\TestCase` class, but can also be enabled through a trait:
+These methods are part of the `Tarantool\PhpUnit\TestCase` class, but they can also be enabled through a trait:
 
 ```php
 use PHPUnit\Framework\TestCase;
@@ -215,7 +215,7 @@ public function testGetSpaceIsCached() : void
 
 ## Mocking
 
-This library provides several helper classes to create test doubles for the [Tarantool Сlient](https://github.com/tarantool-php/client)
+The library provides several helper classes to create test doubles for the [Tarantool Сlient](https://github.com/tarantool-php/client)
 to avoid sending real requests to the Tarantool server. For the convenience of creating such objects,
 add the trait `ClientMocking` to your test class:
 
