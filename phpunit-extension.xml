@@ -27,17 +27,19 @@
 
     <extensions>
         <extension class="Tarantool\PhpUnit\Tests\Annotation\MockAnnotationExtension">
-            <arguments><array>
-                <element key="bool">
-                    <boolean>true</boolean>
-                </element>
-                <element key="int">
-                    <integer>42</integer>
-                </element>
-                <element key="str">
-                    <string>foobar</string>
-                </element>
-            </array></arguments>
+            <arguments>
+                <array>
+                    <element key="bool">
+                        <boolean>true</boolean>
+                    </element>
+                    <element key="int">
+                        <integer>42</integer>
+                    </element>
+                    <element key="str">
+                        <string>foobar</string>
+                    </element>
+                </array>
+            </arguments>
         </extension>
     </extensions>
 </phpunit>
