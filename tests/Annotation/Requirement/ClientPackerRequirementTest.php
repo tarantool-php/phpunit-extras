@@ -57,8 +57,8 @@ final class ClientPackerRequirementTest extends TestCase
             ->willUsePacker($packer)
             ->build();
 
-        $errorMessage = sprintf('Client packer "%s" is required', $expectedPackerClass);
         $requirement = new ClientPackerRequirement($mockClient);
+        $errorMessage = sprintf('Client packer "%s" is required', $expectedPackerClass);
 
         self::assertSame($errorMessage, $requirement->check($requiredPackerName));
     }

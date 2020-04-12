@@ -44,6 +44,9 @@ final class TarantoolVersionRequirementTest extends TestCase
         $v2_3_1_3 = '2.3.1-3-g878e2a42c';
 
         return [
+            [$v2_3_1_3, '^2.3.1-2'],
+            [$v2_3_1_3, '^2.3.0-4'],
+            [$v2_3_1_3, '^2.3.1'],
             [$v2_3_1_3, '^1|^2'],
             [$v2_3_1_3, '^2'],
 
@@ -80,6 +83,60 @@ final class TarantoolVersionRequirementTest extends TestCase
             [$v2_3_1_3, '< 2.3.2'],
             [$v2_3_1_3, '< 2.4'],
             [$v2_3_1_3, '< 3'],
+        ];
+    }
+
+    /**
+     * @dataProvider provideCheckFailsForInvalidConstraintsData()
+     */
+    public function testCheckFailsForInvalidConstraints(string $serverVersion, string $constraints) : void
+    {
+        $mockClient = $this->getMockClientBuilder()
+            ->shouldHandle(
+                new CallRequest('box.info'), // $this->logicalOr()
+                DummyFactory::createResponseFromData([['version' => $serverVersion]]))
+            ->build();
+
+        $requirement = new TarantoolVersionRequirement($mockClient);
+        $errorMessage = sprintf('Tarantool version %s is required', $constraints);
+
+        self::assertSame($errorMessage, $requirement->check($constraints));
+    }
+
+    public function provideCheckFailsForInvalidConstraintsData() : iterable
+    {
+        $v2_3_1_3 = '2.3.1-3-g878e2a42c';
+
+        return [
+            [$v2_3_1_3, '^2.3.1-4'],
+            [$v2_3_1_3, '^3|^4'],
+            [$v2_3_1_3, '^3'],
+
+            [$v2_3_1_3, '2.3.1-4'],
+            [$v2_3_1_3, '2.3.2'],
+            [$v2_3_1_3, '2.4'],
+            [$v2_3_1_3, '3'],
+
+            [$v2_3_1_3, '>= 2.3.1-4'],
+            [$v2_3_1_3, '>= 2.3.2'],
+            [$v2_3_1_3, '>= 2.4'],
+            [$v2_3_1_3, '>= 3'],
+
+            [$v2_3_1_3, '> 2.3.1-3'],
+            [$v2_3_1_3, '> 2.3.2'],
+            [$v2_3_1_3, '> 2.4'],
+            [$v2_3_1_3, '> 3'],
+
+            [$v2_3_1_3, '<= 2.3.1-2'],
+            [$v2_3_1_3, '<= 2.3.1'],
+            [$v2_3_1_3, '<= 2.3.0'],
+            [$v2_3_1_3, '<= 2.3'],
+            [$v2_3_1_3, '<= 2'],
+
+            [$v2_3_1_3, '< 2.3.1-3'],
+            [$v2_3_1_3, '< 2.3.1'],
+            [$v2_3_1_3, '< 2.3'],
+            [$v2_3_1_3, '< 2'],
         ];
     }
 }
