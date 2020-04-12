@@ -39,7 +39,7 @@ final class MyTest extends TestCase
 {
     protected function getClient() : Client
     {
-        // you have to implement this method
+        // TODO: Implement getClient() method.
     }
     
     // ...
@@ -162,7 +162,7 @@ public function testChangeUserPassword() : void
 
 ```php
 /**
- * @requires Tarantool >= 2.3.2 
+ * @requires Tarantool ^2.3.2 
  */
 public function testPrepareCreatesPreparedStatement() : void
 {
@@ -212,6 +212,32 @@ public function testGetSpaceIsCached() : void
 }
 ```
 
+In order to check SQL statements, use the `Tarantool\PhpUnit\Expectation\SqlStatementExpectations` trait,
+which contains the following methods:
+
+ * `expectSqlStatementToBeExecuted(int $count) : void`
+ * `expectSqlStatementToBeExecutedAtLeast(int $count) : void`
+ * `expectSqlStatementToBeExecutedAtMost(int $count) : void`
+ * `expectSqlStatementToBeExecutedOnce() : void`
+ * `expectSqlStatementToBeNeverCalled() : void`
+ * `expectSqlStatementToBeExecutedAtLeastOnce() : void`
+ * `expectSqlStatementToBeExecutedAtMostOnce() : void`
+
+Usage example:
+
+```php
+public function testCloseDeallocatesPreparedStatement() : void
+{
+    $stmt = $this->client->prepare('SELECT ?');
+
+    $this->expectSqlStatementToBeExecutedOnce();
+    $stmt->close();
+}
+```
+
+To enable all the above expectation methods in one go, use the `Tarantool\PhpUnit\Expectation\Expectations` trait,
+or extend the `Tarantool\PhpUnit\TestCase` class.
+
 
 ## Mocking
 
@@ -249,11 +275,10 @@ public function testFoo() : void
 
 To simulate specific scenarios, such as establishing a connection to a server
 or returning specific responses in a specific order from the server, use the facilities
-of the `MockClientBuilder` class. For example, to simulate `PING` request/response:
+of the `MockClientBuilder` class. For example, to simulate the `PING` request:
 
 ```php
 use Tarantool\Client\Request\PingRequest;
-use Tarantool\PhpUnit\Client\DummyFactory;
 use Tarantool\PhpUnit\TestCase;
 
 final class MyTest extends TestCase
@@ -261,11 +286,9 @@ final class MyTest extends TestCase
     public function testFoo() : void
     {
         $mockClient = $this->getMockClientBuilder()
-            ->shouldHandle(
-                new PingRequest(),
-                DummyFactory::createEmptyResponse()
-            )->build();
-    
+            ->shouldSend(new PingRequest())
+            ->build();
+
         // ...
     }
 
@@ -285,8 +308,10 @@ final class MyTest extends TestCase
     public function testFoo() : void
     {
         $mockClient = $this->getMockClientBuilder()
-            ->shouldHandle(
-                RequestTypes::EVALUATE,
+            ->shouldSend(
+                RequestTypes::EVALUATE, 
+                RequestTypes::EVALUATE
+            )->willReceive(
                 DummyFactory::createResponseFromData([2]),
                 DummyFactory::createResponseFromData([3])
             )->build();
@@ -296,6 +321,16 @@ final class MyTest extends TestCase
 
     // ...
 }
+```
+The above example can be simplified to:
+
+```php
+$mockClient = $this->getMockClientBuilder()
+    ->shouldHandle(
+        RequestTypes::EVALUATE,
+        DummyFactory::createResponseFromData([2]),
+        DummyFactory::createResponseFromData([3])
+    )->build();
 ```
 
 Besides, the builder allows setting custom `Connection` and `Packer` instances:

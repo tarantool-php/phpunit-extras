@@ -19,10 +19,9 @@ use Symfony\Component\ExpressionLanguage\ExpressionLanguage;
 use Tarantool\Client\RequestTypes;
 use Tarantool\PhpUnit\Client\ClientMocking;
 use Tarantool\PhpUnit\Client\DummyFactory;
-use Tarantool\PhpUnit\Expectation\ExpressionContext\RequestCountContext;
-use Tarantool\PhpUnit\Expectation\ExpressionContext\RequestCounter;
+use Tarantool\PhpUnit\Expectation\ExpressionContext\SqlStatementCountContext;
 
-final class RequestCountContextTest extends TestCase
+final class SqlStatementCountContextTest extends TestCase
 {
     use ClientMocking;
 
@@ -44,51 +43,52 @@ final class RequestCountContextTest extends TestCase
                 RequestTypes::EVALUATE,
                 DummyFactory::createResponseFromData([2]),
                 DummyFactory::createResponseFromData([3])
-            )->build();
+            )
+            ->build();
 
-        $context = RequestCountContext::exactly($mockClient, new RequestCounter(), 'CALL', 1);
+        $context = SqlStatementCountContext::exactly($mockClient, 1);
 
         self::assertSame(['old_count' => 2, 'new_count' => 3], $context->getValues());
     }
 
     public function testExactlyExpressionEvaluatesToTrue() : void
     {
-        $context = RequestCountContext::exactly($this->mockClient, new RequestCounter(), 'CALL', 3);
+        $context = SqlStatementCountContext::exactly($this->mockClient, 3);
 
         self::assertEvaluatedToTrue($context, ['old_count' => 1, 'new_count' => 4]);
     }
 
     public function testExactlyExpressionEvaluatesToFalse() : void
     {
-        $context = RequestCountContext::exactly($this->mockClient, new RequestCounter(), 'CALL', 7);
+        $context = SqlStatementCountContext::exactly($this->mockClient, 7);
 
         self::assertEvaluatedToFalse($context, ['old_count' => 1, 'new_count' => 4]);
     }
 
     public function testAtLeastExpressionEvaluatesToTrue() : void
     {
-        $context = RequestCountContext::atLeast($this->mockClient, new RequestCounter(), 'CALL', 3);
+        $context = SqlStatementCountContext::atLeast($this->mockClient, 3);
 
         self::assertEvaluatedToTrue($context, ['old_count' => 1, 'new_count' => 4]);
     }
 
     public function testAtLeastExpressionEvaluatesToFalse() : void
     {
-        $context = RequestCountContext::atLeast($this->mockClient, new RequestCounter(), 'CALL', 7);
+        $context = SqlStatementCountContext::atLeast($this->mockClient, 7);
 
         self::assertEvaluatedToFalse($context, ['old_count' => 1, 'new_count' => 4]);
     }
 
     public function testAtMostExpressionEvaluatesToTrue() : void
     {
-        $context = RequestCountContext::atMost($this->mockClient, new RequestCounter(), 'CALL', 3);
+        $context = SqlStatementCountContext::atMost($this->mockClient, 3);
 
         self::assertEvaluatedToTrue($context, ['old_count' => 1, 'new_count' => 4]);
     }
 
     public function testAtMostExpressionEvaluatesToFalse() : void
     {
-        $context = RequestCountContext::atMost($this->mockClient, new RequestCounter(), 'CALL', 3);
+        $context = SqlStatementCountContext::atMost($this->mockClient, 3);
 
         self::assertEvaluatedToFalse($context, ['old_count' => 1, 'new_count' => 7]);
     }

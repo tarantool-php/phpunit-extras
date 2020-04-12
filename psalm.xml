@@ -19,6 +19,7 @@
             <errorLevel type="suppress">
                 <referencedMethod name="PHPUnit\Framework\MockObject\Builder\InvocationMocker::method" />
                 <referencedMethod name="PHPUnit\Framework\MockObject\Builder\InvocationMocker::with" />
+                <referencedMethod name="PHPUnit\Framework\MockObject\Builder\InvocationMocker::withConsecutive" />
                 <referencedMethod name="PHPUnit\Framework\MockObject\Builder\InvocationMocker::willReturn" />
                 <referencedMethod name="PHPUnit\Framework\MockObject\Builder\InvocationMocker::willReturnOnConsecutiveCalls" />
                 <referencedMethod name="PHPUnit\Framework\TestCase::__construct" />

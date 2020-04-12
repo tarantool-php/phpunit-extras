@@ -28,8 +28,11 @@ final class MockClientBuilder
     /** @var TestCase */
     private $testCase;
 
-    /** @var \SplObjectStorage<object, array<int, Response>> */
+    /** @var array<int, Request>|null */
     private $requests;
+
+    /** @var array<int, Response> */
+    private $responses;
 
     /** @var Connection|null */
     private $connection;
@@ -37,10 +40,13 @@ final class MockClientBuilder
     /** @var Packer|null */
     private $packer;
 
+    /** @var int|null */
+    private $shouldBeCalledTimes = null;
+
     public function __construct(TestCase $testCase)
     {
         $this->testCase = $testCase;
-        $this->requests = new \SplObjectStorage();
+        $this->responses = [DummyFactory::createEmptyResponse()];
     }
 
     public static function buildDefault() : Client
@@ -54,15 +60,39 @@ final class MockClientBuilder
 
     /**
      * @param Request|Constraint|int $request
+     * @param Request|Constraint|int ...$requests
+     */
+    public function shouldSend($request, ...$requests) : self
+    {
+        $this->requests = [];
+        foreach (\func_get_args() as $arg) {
+            $this->requests[] = \is_int($arg) ? new IsRequestType($arg) : $arg;
+        }
+
+        $this->shouldBeCalledTimes = \count($this->requests);
+
+        return $this;
+    }
+
+    /**
+     * @param Request|Constraint|int $request
      * @param Response ...$responses
      */
     public function shouldHandle($request, ...$responses) : self
     {
-        if (\is_int($request)) {
-            $request = new IsRequestType($request);
+        $this->shouldSend($request);
+        $this->willReceive(...$responses);
+
+        if ($responses) {
+            $this->shouldBeCalledTimes = \count($responses);
         }
 
-        $this->requests->attach($request, $responses);
+        return $this;
+    }
+
+    public function willReceive(Response $response, Response ...$responses) : self
+    {
+        $this->responses = \func_get_args();
 
         return $this;
     }
@@ -99,23 +129,18 @@ final class MockClientBuilder
         $packer = $this->createPacker();
         $handler->method('getPacker')->willReturn($packer);
 
-        $defaultResponse = DummyFactory::createEmptyResponse();
+        $handleMocker = null !== $this->shouldBeCalledTimes
+            ? $handler->expects(TestCase::exactly($this->shouldBeCalledTimes))->method('handle')
+            : $handler->method('handle');
 
-        if (!$this->requests->count()) {
-            $handler->method('handle')->willReturn($defaultResponse);
-
-            return $handler;
+        if ($this->requests) {
+            $handleMocker->withConsecutive(...array_chunk($this->requests, 1));
         }
 
-        foreach ($this->requests as $request) {
-            if (!$responses = $this->requests->getInfo()) {
-                $handler->method('handle')->with($request)->willReturn($defaultResponse);
-                continue;
-            }
-
-            $handler->expects(TestCase::exactly(\count($responses)))
-                ->method('handle')->with($request)
-                ->willReturnOnConsecutiveCalls(...$responses);
+        if (1 === \count($this->responses)) {
+            $handleMocker->willReturn($this->responses[0]);
+        } else {
+            $handleMocker->willReturnOnConsecutiveCalls(...$this->responses);
         }
 
         return $handler;
