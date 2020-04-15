@@ -109,7 +109,7 @@ Once the annotations are configured, you can start using them:
 
 ### Processors
 
-##### Lua
+#### Lua
 
 ```php
 /**
@@ -122,7 +122,7 @@ public function testKickReleasesBuriedTask() : void
 }
 ```
 
-##### Sql
+#### Sql
 
 ```php
 /**
@@ -139,7 +139,7 @@ public function testExecuteQueryFetchesAllRows() : void
 
 ### Requirements
 
-##### clientPacker
+#### clientPacker
 
 *Format:*
 
@@ -160,7 +160,7 @@ public function testPackerUnpacksBigIntegerAsDecimal() : void
 }
 ```
 
-##### luaCondition
+#### luaCondition
 
 *Format:*
 
@@ -181,7 +181,7 @@ public function testChangeUserPassword() : void
 }
 ```
 
-##### Tarantool
+#### Tarantool
 
 *Format:*
 
@@ -237,7 +237,7 @@ final class MyTest extends TestCase
 }
 ```
 
-Usage example:
+*Example:*
 
 ```php
 public function testGetSpaceIsCached() : void
@@ -263,7 +263,7 @@ which contains the following methods:
 
 where `<TYPE>` is either `Allocated` or `Deallocated`.
 
-Usage example:
+*Example:*
 
 ```php
 public function testCloseDeallocatesPreparedStatement() : void
