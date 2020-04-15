@@ -16,5 +16,5 @@ namespace Tarantool\PhpUnit\Expectation;
 trait Expectations
 {
     use RequestExpectations;
-    use SqlStatementExpectations;
+    use PreparedStatementExpectations;
 }

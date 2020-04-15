@@ -48,6 +48,9 @@ final class RequestCountContext implements ExpressionContext
     /** @var int */
     private $initialValue;
 
+    /** @var int|null */
+    private $finalValue;
+
     private function __construct(Client $client, RequestCounter $requestCounter, string $requestName, string $expression)
     {
         $this->requestCounter = $requestCounter;
@@ -79,9 +82,13 @@ final class RequestCountContext implements ExpressionContext
 
     public function getValues() : array
     {
+        if (null === $this->finalValue) {
+            $this->finalValue = $this->getValue();
+        }
+
         return [
             'old_count' => $this->initialValue,
-            'new_count' => $this->getValue(),
+            'new_count' => $this->finalValue,
         ];
     }
 

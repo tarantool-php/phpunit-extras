@@ -136,6 +136,15 @@ public function testExecuteQueryFetchesAllRows() : void
 
 *ClientPacker*
 
+Format:
+
+```
+@requires clientPacker <packer>
+```
+where `<packer>` is either `pure`, `pecl`, or a fully qualified class name, e.g. `Tarantool\Client\Packer\PurePacker`.
+
+Example:
+
 ```php
 /**
  * @requires clientPacker pure 
@@ -147,6 +156,15 @@ public function testPackerUnpacksBigIntegerAsDecimal() : void
 ```
 
 *LuaCondition*
+
+Format:
+
+```
+@requires luaCondition <lua-expression>
+```
+where `<lua-expression>` is an arbitrary lua expression that should be evaluated to a Boolean value.
+
+Example:
 
 ```php
 /**
@@ -160,6 +178,16 @@ public function testChangeUserPassword() : void
 
 *Tarantool*
 
+Format:
+
+```
+@requires Tarantool <version-constraint>
+```
+where `<version-constraint>` is a composer-like version constraint. For details on supported formats, 
+please see the Composer [documentation](https://getcomposer.org/doc/articles/versions.md#writing-version-constraints).
+
+Example:
+
 ```php
 /**
  * @requires Tarantool ^2.3.2 
@@ -169,6 +197,11 @@ public function testPrepareCreatesPreparedStatement() : void
     // ...
 }
 ```
+
+> *Note*
+>
+> If you're interested in how to create and register your own annotations,
+> please refer to the `rybakit/phpunit-extras` [README](https://github.com/rybakit/phpunit-extras).
 
 
 ## Expectations
@@ -212,16 +245,18 @@ public function testGetSpaceIsCached() : void
 }
 ```
 
-In order to check SQL statements, use the `Tarantool\PhpUnit\Expectation\SqlStatementExpectations` trait,
+In order to assert prepared statement allocations, use the `Tarantool\PhpUnit\Expectation\PreparedStatementExpectations` trait,
 which contains the following methods:
 
- * `expectSqlStatementToBeExecuted(int $count) : void`
- * `expectSqlStatementToBeExecutedAtLeast(int $count) : void`
- * `expectSqlStatementToBeExecutedAtMost(int $count) : void`
- * `expectSqlStatementToBeExecutedOnce() : void`
- * `expectSqlStatementToBeNeverCalled() : void`
- * `expectSqlStatementToBeExecutedAtLeastOnce() : void`
- * `expectSqlStatementToBeExecutedAtMostOnce() : void`
+ * `expectPreparedStatementToBe<TYPE>(int $count) : void`
+ * `expectPreparedStatementToBe<TYPE>AtLeast(int $count) : void`
+ * `expectPreparedStatementToBe<TYPE>AtMost(int $count) : void`
+ * `expectPreparedStatementToBe<TYPE>Once() : void`
+ * `expectPreparedStatementToBeNever<TYPE>() : void`
+ * `expectPreparedStatementToBe<TYPE>AtLeastOnce() : void`
+ * `expectPreparedStatementToBe<TYPE>AtMostOnce() : void`
+
+where `<TYPE>` is either `Allocated` or `Deallocated`.
 
 Usage example:
 
@@ -230,7 +265,7 @@ public function testCloseDeallocatesPreparedStatement() : void
 {
     $stmt = $this->client->prepare('SELECT ?');
 
-    $this->expectSqlStatementToBeExecutedOnce();
+    $this->expectPreparedStatementToBeDeallocatedOnce();
     $stmt->close();
 }
 ```

@@ -16,7 +16,7 @@ namespace Tarantool\PhpUnit\Expectation\ExpressionContext;
 use PHPUnitExtras\Expectation\ExpressionContext;
 use Tarantool\Client\Client;
 
-final class SqlStatementCountContext implements ExpressionContext
+final class PreparedStatementCountContext implements ExpressionContext
 {
     /** @var Client */
     private $client;
@@ -26,6 +26,9 @@ final class SqlStatementCountContext implements ExpressionContext
 
     /** @var int */
     private $initialValue;
+
+    /** @var int|null */
+    private $finalValue;
 
     private function __construct(Client $client, string $expression)
     {
@@ -56,9 +59,13 @@ final class SqlStatementCountContext implements ExpressionContext
 
     public function getValues() : array
     {
+        if (null === $this->finalValue) {
+            $this->finalValue = $this->getValue();
+        }
+
         return [
             'old_count' => $this->initialValue,
-            'new_count' => $this->getValue(),
+            'new_count' => $this->finalValue,
         ];
     }
 
