@@ -1,6 +1,7 @@
 # PHPUnit Extras
 
 ![Continuous Integration](https://github.com/tarantool-php/phpunit-extras/workflows/Continuous%20Integration/badge.svg)
+[![Telegram](https://img.shields.io/badge/Telegram-join%20chat-blue.svg)](https://t.me/tarantool_php)
 
 A collection of helpers for [PHPUnit](https://phpunit.de/) to ease testing [Tarantool](https://www.tarantool.io/en/developers/) libraries.
 It is based on [rybakit/phpunit-extras](https://github.com/rybakit/phpunit-extras), please refer to this package for more documentation.
