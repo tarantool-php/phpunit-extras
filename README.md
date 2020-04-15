@@ -11,7 +11,12 @@ It is based on [rybakit/phpunit-extras](https://github.com/rybakit/phpunit-extra
  * [Installation](#installation)
  * [Annotations](#annotations)
    * [Processors](#processors)
+     * [Lua](#lua)
+     * [Sql](#sql)
    * [Requirements](#requirements)
+     * [clientPacker](#clientpacker)
+     * [luaCondition](#luacondition)
+     * [Tarantool](#tarantool)
  * [Expectations](#expectations)
  * [Mocking](#mocking)
  * [Testing](#testing)
@@ -104,7 +109,7 @@ Once the annotations are configured, you can start using them:
 
 ### Processors
 
-*Lua*
+##### Lua
 
 ```php
 /**
@@ -117,7 +122,7 @@ public function testKickReleasesBuriedTask() : void
 }
 ```
 
-*Sql*
+##### Sql
 
 ```php
 /**
@@ -134,16 +139,16 @@ public function testExecuteQueryFetchesAllRows() : void
 
 ### Requirements
 
-*ClientPacker*
+##### clientPacker
 
-Format:
+*Format:*
 
 ```
 @requires clientPacker <packer>
 ```
 where `<packer>` is either `pure`, `pecl`, or a fully qualified class name, e.g. `Tarantool\Client\Packer\PurePacker`.
 
-Example:
+*Example:*
 
 ```php
 /**
@@ -155,16 +160,16 @@ public function testPackerUnpacksBigIntegerAsDecimal() : void
 }
 ```
 
-*LuaCondition*
+##### luaCondition
 
-Format:
+*Format:*
 
 ```
 @requires luaCondition <lua-expression>
 ```
 where `<lua-expression>` is an arbitrary lua expression that should be evaluated to a Boolean value.
 
-Example:
+*Example:*
 
 ```php
 /**
@@ -176,9 +181,9 @@ public function testChangeUserPassword() : void
 }
 ```
 
-*Tarantool*
+##### Tarantool
 
-Format:
+*Format:*
 
 ```
 @requires Tarantool <version-constraint>
@@ -186,7 +191,7 @@ Format:
 where `<version-constraint>` is a composer-like version constraint. For details on supported formats, 
 please see the Composer [documentation](https://getcomposer.org/doc/articles/versions.md#writing-version-constraints).
 
-Example:
+*Example:*
 
 ```php
 /**
