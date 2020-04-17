@@ -19,6 +19,8 @@ It is based on [rybakit/phpunit-extras](https://github.com/rybakit/phpunit-extra
      * [luaCondition](#luacondition)
      * [Tarantool](#tarantool)
  * [Expectations](#expectations)
+   * [Requests](#requests)
+   * [Prepared statements](#prepared-statements)
  * [Mocking](#mocking)
  * [Testing](#testing)
  * [License](#license)
@@ -212,6 +214,8 @@ public function testPrepareCreatesPreparedStatement() : void
 
 ## Expectations
 
+### Requests
+
 To test that your code sends (or does not send) certain requests, the following methods are available:
 
  * `TestCase::expect<REQUEST_NAME>RequestToBeCalled(int $count) : void`
@@ -250,6 +254,8 @@ public function testGetSpaceIsCached() : void
     $this->client->getSpace('test_space');
 }
 ```
+
+### Prepared statements
 
 In order to assert prepared statement allocations, use the `Tarantool\PhpUnit\Expectation\PreparedStatementExpectations` trait,
 which contains the following methods:
