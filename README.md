@@ -15,9 +15,9 @@ It is based on [rybakit/phpunit-extras](https://github.com/rybakit/phpunit-extra
      * [Lua](#lua)
      * [Sql](#sql)
    * [Requirements](#requirements)
-     * [clientPacker](#clientpacker)
-     * [luaCondition](#luacondition)
-     * [Tarantool](#tarantool)
+     * [ClientPacker](#clientpacker)
+     * [LuaCondition](#luacondition)
+     * [TarantoolVersion](#tarantoolversion)
  * [Expectations](#expectations)
    * [Requests](#requests)
    * [Prepared statements](#prepared-statements)
@@ -142,7 +142,7 @@ public function testExecuteQueryFetchesAllRows() : void
 
 ### Requirements
 
-#### clientPacker
+#### ClientPacker
 
 *Format:*
 
@@ -163,7 +163,7 @@ public function testPackerUnpacksBigIntegerAsDecimal() : void
 }
 ```
 
-#### luaCondition
+#### LuaCondition
 
 *Format:*
 
@@ -184,7 +184,7 @@ public function testChangeUserPassword() : void
 }
 ```
 
-#### Tarantool
+#### TarantoolVersion
 
 *Format:*
 
