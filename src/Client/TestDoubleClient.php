@@ -15,15 +15,15 @@ namespace Tarantool\PhpUnit\Client;
 
 use Tarantool\Client\Client;
 
-trait ClientMocking
+trait TestDoubleClient
 {
-    protected function getMockClientBuilder() : MockClientBuilder
+    protected function getTestDoubleClientBuilder() : TestDoubleClientBuilder
     {
-        return new MockClientBuilder($this);
+        return new TestDoubleClientBuilder($this);
     }
 
-    protected function createMockClient() : Client
+    protected function createDummyClient() : Client
     {
-        return $this->getMockClientBuilder()->build();
+        return $this->getTestDoubleClientBuilder()->build();
     }
 }

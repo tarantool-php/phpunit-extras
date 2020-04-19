@@ -17,13 +17,13 @@ use PHPUnit\Framework\ExpectationFailedException;
 use PHPUnitExtras\TestCase;
 use Tarantool\Client\Client;
 use Tarantool\Client\RequestTypes;
-use Tarantool\PhpUnit\Client\ClientMocking;
-use Tarantool\PhpUnit\Client\DummyFactory;
+use Tarantool\PhpUnit\Client\TestDoubleClient;
+use Tarantool\PhpUnit\Client\TestDoubleFactory;
 use Tarantool\PhpUnit\Expectation\PreparedStatementExpectations;
 
 final class PreparedStatementExpectationsTest extends TestCase
 {
-    use ClientMocking;
+    use TestDoubleClient;
     use PreparedStatementExpectations;
 
     private $oldValue;
@@ -31,11 +31,11 @@ final class PreparedStatementExpectationsTest extends TestCase
 
     protected function getClient() : Client
     {
-        return $this->getMockClientBuilder()
+        return $this->getTestDoubleClientBuilder()
             ->shouldHandle(
                 RequestTypes::EVALUATE,
-                DummyFactory::createResponseFromData([$this->oldValue]),
-                DummyFactory::createResponseFromData([$this->newValue])
+                TestDoubleFactory::createResponseFromData([$this->oldValue]),
+                TestDoubleFactory::createResponseFromData([$this->newValue])
             )
             ->build();
     }

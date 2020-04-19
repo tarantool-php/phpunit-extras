@@ -18,22 +18,22 @@ use Tarantool\Client\Packer\Packer;
 use Tarantool\Client\Packer\PeclPacker;
 use Tarantool\Client\Packer\PurePacker;
 use Tarantool\PhpUnit\Annotation\Requirement\ClientPackerRequirement;
-use Tarantool\PhpUnit\Client\ClientMocking;
+use Tarantool\PhpUnit\Client\TestDoubleClient;
 
 final class ClientPackerRequirementTest extends TestCase
 {
-    use ClientMocking;
+    use TestDoubleClient;
 
     /**
      * @dataProvider provideCheckPassesForMatchedPackerData()
      */
     public function testCheckPassesForMatchedPacker(Packer $packer, string $requiredPackerName) : void
     {
-        $mockClient = $this->getMockClientBuilder()
+        $stubClient = $this->getTestDoubleClientBuilder()
             ->willUsePacker($packer)
             ->build();
 
-        $requirement = new ClientPackerRequirement($mockClient);
+        $requirement = new ClientPackerRequirement($stubClient);
 
         self::assertNull($requirement->check($requiredPackerName));
     }
@@ -53,11 +53,11 @@ final class ClientPackerRequirementTest extends TestCase
      */
     public function testCheckFailsForMismatchedPacker(Packer $packer, string $requiredPackerName, string $expectedPackerClass) : void
     {
-        $mockClient = $this->getMockClientBuilder()
+        $stubClient = $this->getTestDoubleClientBuilder()
             ->willUsePacker($packer)
             ->build();
 
-        $requirement = new ClientPackerRequirement($mockClient);
+        $requirement = new ClientPackerRequirement($stubClient);
         $errorMessage = sprintf('Client packer "%s" is required', $expectedPackerClass);
 
         self::assertSame($errorMessage, $requirement->check($requiredPackerName));

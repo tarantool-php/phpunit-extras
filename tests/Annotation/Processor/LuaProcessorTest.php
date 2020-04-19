@@ -16,21 +16,21 @@ namespace Tarantool\PhpUnit\Tests\Annotation\Processor;
 use PHPUnit\Framework\TestCase;
 use Tarantool\Client\Request\EvaluateRequest;
 use Tarantool\PhpUnit\Annotation\Processor\LuaProcessor;
-use Tarantool\PhpUnit\Client\ClientMocking;
-use Tarantool\PhpUnit\Client\DummyFactory;
+use Tarantool\PhpUnit\Client\TestDoubleClient;
+use Tarantool\PhpUnit\Client\TestDoubleFactory;
 
 final class LuaProcessorTest extends TestCase
 {
-    use ClientMocking;
+    use TestDoubleClient;
 
     public function testProcessProcessesLuaExpression() : void
     {
         $luaExpression = 'a = 42';
 
-        $mockClient = $this->getMockClientBuilder()
+        $mockClient = $this->getTestDoubleClientBuilder()
             ->shouldHandle(
                 new EvaluateRequest($luaExpression),
-                DummyFactory::createEmptyResponse()
+                TestDoubleFactory::createEmptyResponse()
             )
             ->build();
 

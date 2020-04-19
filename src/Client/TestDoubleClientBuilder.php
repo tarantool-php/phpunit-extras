@@ -23,7 +23,7 @@ use Tarantool\Client\Packer\Packer;
 use Tarantool\Client\Request\Request;
 use Tarantool\Client\Response;
 
-final class MockClientBuilder
+final class TestDoubleClientBuilder
 {
     /** @var TestCase */
     private $testCase;
@@ -46,10 +46,10 @@ final class MockClientBuilder
     public function __construct(TestCase $testCase)
     {
         $this->testCase = $testCase;
-        $this->responses = [DummyFactory::createEmptyResponse()];
+        $this->responses = [TestDoubleFactory::createEmptyResponse()];
     }
 
-    public static function buildDefault() : Client
+    public static function buildDummy() : Client
     {
         /** @psalm-suppress PropertyNotSetInConstructor */
         $self = new self(new class() extends TestCase {

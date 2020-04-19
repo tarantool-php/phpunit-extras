@@ -16,22 +16,22 @@ namespace Tarantool\PhpUnit\Tests\Annotation\Requirement;
 use PHPUnit\Framework\TestCase;
 use Tarantool\Client\Request\CallRequest;
 use Tarantool\PhpUnit\Annotation\Requirement\TarantoolVersionRequirement;
-use Tarantool\PhpUnit\Client\ClientMocking;
-use Tarantool\PhpUnit\Client\DummyFactory;
+use Tarantool\PhpUnit\Client\TestDoubleClient;
+use Tarantool\PhpUnit\Client\TestDoubleFactory;
 
 final class TarantoolVersionRequirementTest extends TestCase
 {
-    use ClientMocking;
+    use TestDoubleClient;
 
     /**
      * @dataProvider provideCheckPassesForValidConstraintsData()
      */
     public function testCheckPassesForValidConstraints(string $serverVersion, string $constraints) : void
     {
-        $mockClient = $this->getMockClientBuilder()
+        $mockClient = $this->getTestDoubleClientBuilder()
             ->shouldHandle(
                 new CallRequest('box.info'),
-                DummyFactory::createResponseFromData([['version' => $serverVersion]]))
+                TestDoubleFactory::createResponseFromData([['version' => $serverVersion]]))
             ->build();
 
         $requirement = new TarantoolVersionRequirement($mockClient);
@@ -91,10 +91,10 @@ final class TarantoolVersionRequirementTest extends TestCase
      */
     public function testCheckFailsForInvalidConstraints(string $serverVersion, string $constraints) : void
     {
-        $mockClient = $this->getMockClientBuilder()
+        $mockClient = $this->getTestDoubleClientBuilder()
             ->shouldHandle(
                 new CallRequest('box.info'), // $this->logicalOr()
-                DummyFactory::createResponseFromData([['version' => $serverVersion]]))
+                TestDoubleFactory::createResponseFromData([['version' => $serverVersion]]))
             ->build();
 
         $requirement = new TarantoolVersionRequirement($mockClient);

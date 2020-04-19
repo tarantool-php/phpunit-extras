@@ -14,10 +14,10 @@ declare(strict_types=1);
 namespace Tarantool\PhpUnit\Tests\Annotation;
 
 use Tarantool\Client\Client;
-use Tarantool\PhpUnit\Annotation\AnnotationExtension;
-use Tarantool\PhpUnit\Client\MockClientBuilder;
+use Tarantool\PhpUnit\Annotation\AnnotationExtension as BaseAnnotationExtension;
+use Tarantool\PhpUnit\Client\TestDoubleClientBuilder;
 
-final class MockAnnotationExtension extends AnnotationExtension
+final class AnnotationExtension extends BaseAnnotationExtension
 {
     public $resolvedDnsOrOptions;
 
@@ -25,6 +25,6 @@ final class MockAnnotationExtension extends AnnotationExtension
     {
         $this->resolvedDnsOrOptions = $this->getClientConfig();
 
-        return MockClientBuilder::buildDefault();
+        return TestDoubleClientBuilder::buildDummy();
     }
 }

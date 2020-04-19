@@ -17,21 +17,21 @@ use PHPUnit\Framework\TestCase;
 use Tarantool\Client\Keys;
 use Tarantool\Client\Request\ExecuteRequest;
 use Tarantool\PhpUnit\Annotation\Processor\SqlProcessor;
-use Tarantool\PhpUnit\Client\ClientMocking;
-use Tarantool\PhpUnit\Client\DummyFactory;
+use Tarantool\PhpUnit\Client\TestDoubleClient;
+use Tarantool\PhpUnit\Client\TestDoubleFactory;
 
 final class SqlProcessorTest extends TestCase
 {
-    use ClientMocking;
+    use TestDoubleClient;
 
     public function testProcessProcessesSqlStatement() : void
     {
         $sqlStatement = 'INSERT INTO foo VALUES (1)';
 
-        $mockClient = $this->getMockClientBuilder()
+        $mockClient = $this->getTestDoubleClientBuilder()
             ->shouldHandle(
                 ExecuteRequest::fromSql($sqlStatement),
-                DummyFactory::createResponse([Keys::SQL_INFO => []])
+                TestDoubleFactory::createResponse([Keys::SQL_INFO => []])
             )
             ->build();
 

@@ -290,15 +290,15 @@ or extend the `Tarantool\PhpUnit\TestCase` class.
 
 The library provides several helper classes to create test doubles for the [Tarantool Сlient](https://github.com/tarantool-php/client)
 to avoid sending real requests to the Tarantool server. For the convenience of creating such objects,
-add the trait `ClientMocking` to your test class:
+add the trait `TestDoubleClient` to your test class:
 
 ```php
 use PHPUnit\Framework\TestCase;
-use Tarantool\PhpUnit\Client\ClientMocking;
+use Tarantool\PhpUnit\Client\TestDoubleClient;
 
 final class MyTest extends TestCase
 {
-    use ClientMocking;
+    use TestDoubleClient;
 
     // ...
 }
@@ -314,7 +314,7 @@ A dummy client object can be created as follows:
 ```php
 public function testFoo() : void
 {
-    $dummyClient = $this->createMockClient();
+    $dummyClient = $this->createDummyClient();
 
     // ...
 }
@@ -322,7 +322,7 @@ public function testFoo() : void
 
 To simulate specific scenarios, such as establishing a connection to a server
 or returning specific responses in a specific order from the server, use the facilities
-of the `MockClientBuilder` class. For example, to simulate the `PING` request:
+of the `TestDoubleClientBuilder` class. For example, to simulate the `PING` request:
 
 ```php
 use Tarantool\Client\Request\PingRequest;
@@ -332,7 +332,7 @@ final class MyTest extends TestCase
 {
     public function testFoo() : void
     {
-        $mockClient = $this->getMockClientBuilder()
+        $mockClient = $this->getTestDoubleClientBuilder()
             ->shouldSend(new PingRequest())
             ->build();
 
@@ -347,20 +347,20 @@ Another example, sending two `EVALUATE` requests and returning a different respo
 
 ```php
 use Tarantool\Client\RequestTypes;
-use Tarantool\PhpUnit\Client\DummyFactory;
+use Tarantool\PhpUnit\Client\TestDoubleFactory;
 use Tarantool\PhpUnit\TestCase;
 
 final class MyTest extends TestCase
 {
     public function testFoo() : void
     {
-        $mockClient = $this->getMockClientBuilder()
+        $mockClient = $this->getTestDoubleClientBuilder()
             ->shouldSend(
                 RequestTypes::EVALUATE, 
                 RequestTypes::EVALUATE
             )->willReceive(
-                DummyFactory::createResponseFromData([2]),
-                DummyFactory::createResponseFromData([3])
+                TestDoubleFactory::createResponseFromData([2]),
+                TestDoubleFactory::createResponseFromData([3])
             )->build();
     
         // ...
@@ -372,11 +372,11 @@ final class MyTest extends TestCase
 The above example can be simplified to:
 
 ```php
-$mockClient = $this->getMockClientBuilder()
+$mockClient = $this->getTestDoubleClientBuilder()
     ->shouldHandle(
         RequestTypes::EVALUATE,
-        DummyFactory::createResponseFromData([2]),
-        DummyFactory::createResponseFromData([3])
+        TestDoubleFactory::createResponseFromData([2]),
+        TestDoubleFactory::createResponseFromData([3])
     )->build();
 ```
 

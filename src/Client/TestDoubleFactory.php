@@ -16,7 +16,7 @@ namespace Tarantool\PhpUnit\Client;
 use Tarantool\Client\Keys;
 use Tarantool\Client\Response;
 
-final class DummyFactory
+final class TestDoubleFactory
 {
     public static function createResponse(array $body, array $header = []) : Response
     {

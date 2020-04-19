@@ -26,7 +26,7 @@
     </filter>
 
     <extensions>
-        <extension class="Tarantool\PhpUnit\Tests\Annotation\MockAnnotationExtension">
+        <extension class="Tarantool\PhpUnit\Tests\Annotation\AnnotationExtension">
             <arguments>
                 <array>
                     <element key="bool">

@@ -22,7 +22,7 @@ final class AnnotationExtensionTest extends TestCase
      */
     public function testConstructorUsesDefaultDsn() : void
     {
-        $ext = new MockAnnotationExtension();
+        $ext = new AnnotationExtension();
 
         $ext->executeBeforeTest(__METHOD__);
         self::assertSame('tcp://127.0.0.1:3301', $ext->resolvedDnsOrOptions);
@@ -34,7 +34,7 @@ final class AnnotationExtensionTest extends TestCase
     public function testConstructorUsesCustomDsn() : void
     {
         $dsn = 'tcp://tnt_foobar:3302';
-        $ext = new MockAnnotationExtension($dsn);
+        $ext = new AnnotationExtension($dsn);
 
         $ext->executeBeforeTest(__METHOD__);
         self::assertSame($dsn, $ext->resolvedDnsOrOptions);
@@ -51,7 +51,7 @@ final class AnnotationExtensionTest extends TestCase
         $envPortName = 'tnt_phpunit_env_port_'.random_int(1, 1000);
         putenv("$envHostName=$hostname");
         putenv("$envPortName=$port");
-        $ext = new MockAnnotationExtension("tcp://%env($envHostName)%:%env($envPortName)%");
+        $ext = new AnnotationExtension("tcp://%env($envHostName)%:%env($envPortName)%");
 
         $ext->executeBeforeTest(__METHOD__);
         self::assertSame("tcp://$hostname:$port", $ext->resolvedDnsOrOptions);
@@ -68,7 +68,7 @@ final class AnnotationExtensionTest extends TestCase
         $envPortName = 'tnt_phpunit_env_port_'.random_int(1, 1000);
         putenv("$envHostName=$hostname");
         putenv("$envPortName=$port");
-        $ext = new MockAnnotationExtension([
+        $ext = new AnnotationExtension([
             'uri' => "tcp://%env($envHostName)%:%env($envPortName)%",
             'socket_timeout' => 10,
             'persistent' => true,

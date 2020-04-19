@@ -15,12 +15,12 @@ namespace Tarantool\PhpUnit;
 
 use PHPUnitExtras\TestCase as BaseTestCase;
 use Tarantool\PhpUnit\Annotation\Annotations;
-use Tarantool\PhpUnit\Client\ClientMocking;
+use Tarantool\PhpUnit\Client\TestDoubleClient;
 use Tarantool\PhpUnit\Expectation\Expectations;
 
 abstract class TestCase extends BaseTestCase
 {
-    use ClientMocking;
+    use TestDoubleClient;
     use Annotations;
     use Expectations;
 }

@@ -16,21 +16,21 @@ namespace Tarantool\PhpUnit\Tests\Annotation\Requirement;
 use PHPUnit\Framework\TestCase;
 use Tarantool\Client\Request\EvaluateRequest;
 use Tarantool\PhpUnit\Annotation\Requirement\LuaConditionRequirement;
-use Tarantool\PhpUnit\Client\ClientMocking;
-use Tarantool\PhpUnit\Client\DummyFactory;
+use Tarantool\PhpUnit\Client\TestDoubleClient;
+use Tarantool\PhpUnit\Client\TestDoubleFactory;
 
 final class LuaConditionRequirementTest extends TestCase
 {
-    use ClientMocking;
+    use TestDoubleClient;
 
     public function testCheckPassesForTruthyExpression() : void
     {
         $luaExpression = '1 == 1';
 
-        $mockClient = $this->getMockClientBuilder()
+        $mockClient = $this->getTestDoubleClientBuilder()
             ->shouldHandle(
                 new EvaluateRequest("return ($luaExpression)"),
-                DummyFactory::createResponseFromData([true])
+                TestDoubleFactory::createResponseFromData([true])
             )
             ->build();
 
@@ -43,10 +43,10 @@ final class LuaConditionRequirementTest extends TestCase
     {
         $luaExpression = '1 == 2';
 
-        $mockClient = $this->getMockClientBuilder()
+        $mockClient = $this->getTestDoubleClientBuilder()
             ->shouldHandle(
                 new EvaluateRequest("return ($luaExpression)"),
-                DummyFactory::createResponseFromData([false])
+                TestDoubleFactory::createResponseFromData([false])
             )
             ->build();
 
