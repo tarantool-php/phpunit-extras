@@ -74,7 +74,7 @@ You can customize the default settings by specifying either a [DSN string](https
 as extension configuration values:
 
 ```xml
-<extension class="Tarantool\PhpUnit\Annotation">
+<extension class="Tarantool\PhpUnit\Annotation\AnnotationExtension">
     <arguments>
         <string>tcp://127.0.0.1:3301/?socket_timeout=10</string>
     </arguments>
@@ -82,7 +82,7 @@ as extension configuration values:
 ```
 or
 ```xml
-<extension class="Tarantool\PhpUnit\Annotation">
+<extension class="Tarantool\PhpUnit\Annotation\AnnotationExtension">
     <arguments>
         <array>
             <element key="uri">
@@ -101,7 +101,7 @@ which might be useful if you need to share the same settings with a Tarantool
 instance file or any other script:
 
 ```xml
-<extension class="Tarantool\PhpUnit\Annotation">
+<extension class="Tarantool\PhpUnit\Annotation\AnnotationExtension">
     <arguments>
         <string>tcp://%env(TARANTOOL_HOST)%:%env(TARANTOOL_PORT)%</string>
     </arguments>
@@ -113,6 +113,10 @@ Once the annotations are configured, you can start using them:
 ### Processors
 
 #### Lua
+
+Allows executing Lua code before running a test.
+
+*Example:*
 
 ```php
 /**
@@ -126,6 +130,10 @@ public function testKickReleasesBuriedTask() : void
 ```
 
 #### Sql
+
+Allows executing SQL statements before running a test (requires Tarantool 2.0+).
+
+*Example:*
 
 ```php
 /**
@@ -141,6 +149,8 @@ public function testExecuteQueryFetchesAllRows() : void
 
 
 ### Requirements
+
+Requirements allow skipping tests based on preconditions.
 
 #### ClientPacker
 
@@ -208,7 +218,7 @@ public function testPrepareCreatesPreparedStatement() : void
 
 > *Note*
 >
-> If you're interested in how to create and register your own annotations,
+> If you're interested in how to create and register your own annotations and requirements,
 > please refer to the `rybakit/phpunit-extras` [README](https://github.com/rybakit/phpunit-extras).
 
 
