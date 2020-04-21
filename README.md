@@ -36,7 +36,7 @@ composer require --dev tarantool/phpunit-extras
 ## Annotations
 
 Besides the annotations provided by the package `rybakit/phpunit-extras`, the library is shipped
-with add-ons specific to Tarantool. The easiest way to enable them is by inheriting your test classes
+with annotations specific to Tarantool. The easiest way to enable them is by inheriting your test classes
 from `Tarantool\PhpUnit\TestCase`:
 
 ```php
