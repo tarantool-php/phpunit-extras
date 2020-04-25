@@ -178,9 +178,9 @@ public function testPackerUnpacksBigIntegerAsDecimal() : void
 *Format:*
 
 ```
-@requires luaCondition <lua-expression>
+@requires luaCondition <condition>
 ```
-where `<lua-expression>` is an arbitrary lua expression that should be evaluated to a Boolean value.
+where `<condition>` is an arbitrary lua expression that should be evaluated to a Boolean value.
 
 *Example:*
 
