@@ -216,10 +216,8 @@ public function testPrepareCreatesPreparedStatement() : void
 }
 ```
 
-> *Note*
->
-> If you're interested in how to create and register your own annotations and requirements,
-> please refer to the `rybakit/phpunit-extras` [README](https://github.com/rybakit/phpunit-extras).
+> *If you're interested in how to create and register your own annotations and requirements,
+> please refer to the `rybakit/phpunit-extras` [README](https://github.com/rybakit/phpunit-extras).*
 
 
 ## Expectations
@@ -314,10 +312,8 @@ final class MyTest extends TestCase
 }
 ```
 
-> *Note*
->
-> If your test cases extend the `Tarantool\PhpUnit\TestCase` class, this step is not needed
-> because the trait is already included in that class.
+> *If your test cases extend the `Tarantool\PhpUnit\TestCase` class, this step is not needed
+> because the trait is already included in that class.*
 
 A dummy client object can be created as follows:
 
