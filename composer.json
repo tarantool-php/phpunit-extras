@@ -16,7 +16,7 @@
         "ocramius/package-versions": "^1.4",
         "rybakit/msgpack": "^0.7",
         "rybakit/phpunit-extras": "^0.1",
-        "symfony/expression-language": "^3|^4|^5",
+        "symfony/expression-language": "^3.3|^4|^5",
         "tarantool/client": "^0.7"
     },
     "require-dev": {
