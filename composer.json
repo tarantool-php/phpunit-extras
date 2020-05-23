@@ -15,9 +15,9 @@
         "composer/semver": "^1.5",
         "ocramius/package-versions": "^1.4",
         "rybakit/msgpack": "^0.7",
-        "rybakit/phpunit-extras": "^0.1",
+        "rybakit/phpunit-extras": "^0.2",
         "symfony/expression-language": "^3.3|^4|^5",
-        "tarantool/client": "^0.7"
+        "tarantool/client": "^0.7|^0.8"
     },
     "require-dev": {
         "php": "^7.1.3",

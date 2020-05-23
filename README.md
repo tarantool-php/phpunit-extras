@@ -240,11 +240,27 @@ These methods are part of the `Tarantool\PhpUnit\TestCase` class, but they can a
 
 ```php
 use PHPUnit\Framework\TestCase;
+use PHPUnitExtras\Expectation\Expectations as BaseExpectations;
+use Tarantool\Client\Client;
 use Tarantool\PhpUnit\Expectation\RequestExpectations;
 
 final class MyTest extends TestCase
 {
+    use BaseExpectations;
     use RequestExpectations;
+
+    protected function getClient() : Client
+    {
+        // TODO: Implement getClient() method.
+    }
+
+    /**
+     * @after
+     */
+    protected function verifyTestCaseExpectations() : void
+    {
+        $this->verifyExpectations();
+    }
 
     // ...
 }
