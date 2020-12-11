@@ -22,8 +22,8 @@ trait RequestExpectations
     use DeleteRequestExpectations;
     use EvalRequestExpectations;
     use ExecuteRequestExpectations;
-    use PrepareRequestExpectations;
     use InsertRequestExpectations;
+    use PrepareRequestExpectations;
     use ReplaceRequestExpectations;
     use SelectRequestExpectations;
     use UpdateRequestExpectations;

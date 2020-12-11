@@ -20,7 +20,7 @@ use Tarantool\PhpUnit\Expectation\Expectations;
 
 abstract class TestCase extends BaseTestCase
 {
-    use TestDoubleClient;
     use Annotations;
     use Expectations;
+    use TestDoubleClient;
 }

@@ -23,8 +23,8 @@ use Tarantool\PhpUnit\Expectation\PreparedStatementExpectations;
 
 final class PreparedStatementExpectationsTest extends TestCase
 {
-    use TestDoubleClient;
     use PreparedStatementExpectations;
+    use TestDoubleClient;
 
     private $oldValue;
     private $newValue;

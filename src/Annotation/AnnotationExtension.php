@@ -77,8 +77,7 @@ class AnnotationExtension extends BaseAnnotationExtension
             }
 
             $errorMessage = sprintf('Environment variable "%s" does not exist', $matches['name']);
-            throw new class($errorMessage) extends \RuntimeException implements Exception {
-            };
+            throw new class($errorMessage) extends \RuntimeException implements Exception { };
         }, $configValue);
     }
 }

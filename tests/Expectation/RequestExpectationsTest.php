@@ -23,8 +23,8 @@ use Tarantool\PhpUnit\Expectation\RequestExpectations;
 
 final class RequestExpectationsTest extends TestCase
 {
-    use TestDoubleClient;
     use RequestExpectations;
+    use TestDoubleClient;
 
     private $oldValue;
     private $newValue;
