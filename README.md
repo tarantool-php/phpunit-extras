@@ -1,6 +1,6 @@
 # PHPUnit Extras
 
-![Quality Assurance](https://github.com/tarantool-php/phpunit-extras/workflows/QA/badge.svg)
+[![Quality Assurance](https://github.com/tarantool-php/phpunit-extras/workflows/QA/badge.svg)](https://github.com/tarantool-php/phpunit-extras/actions?query=workflow%3AQA)
 [![Telegram](https://img.shields.io/badge/Telegram-join%20chat-blue.svg)](https://t.me/tarantool_php)
 
 A collection of helpers for [PHPUnit](https://phpunit.de/) to ease testing [Tarantool](https://www.tarantool.io/en/developers/) libraries.
