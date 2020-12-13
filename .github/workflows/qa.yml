@@ -20,6 +20,7 @@ jobs:
         uses: shivammathur/setup-php@v2
         with:
           php-version: ${{ matrix.php-versions }}
+          extensions: msgpack
           coverage: none
 
       - name: Get composer cache directory
@@ -52,6 +53,7 @@ jobs:
         uses: shivammathur/setup-php@v2
         with:
           php-version: '7.4'
+          extensions: msgpack
           coverage: none
 
       - name: Get composer cache directory
