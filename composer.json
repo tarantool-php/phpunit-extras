@@ -13,7 +13,7 @@
     "require": {
         "php": "^7.1|^8",
         "composer/semver": "^1.5",
-        "ocramius/package-versions": "^1.4",
+        "composer/package-versions-deprecated": "^1.4",
         "rybakit/msgpack": "^0.7",
         "rybakit/phpunit-extras": "^0.2",
         "symfony/expression-language": "^3.3|^4|^5",
