@@ -51,7 +51,10 @@ final class TestDoubleClientBuilder
 
     public static function buildDummy() : Client
     {
-        /** @psalm-suppress PropertyNotSetInConstructor */
+        /**
+         * @psalm-suppress InternalMethod
+         * @psalm-suppress PropertyNotSetInConstructor
+         */
         $self = new self(new class() extends TestCase {
         });
 
