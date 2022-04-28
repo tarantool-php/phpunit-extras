@@ -36,7 +36,7 @@ final class TarantoolVersionRequirement implements Requirement
 
     public function check(string $value) : ?string
     {
-        // replace dash with dot
+        // Replace dash with dot.
         $constraints = preg_replace('/(\d+\.\d+\.\d+)-(\d+)/', '$1.$2', $value);
 
         if (Semver::satisfies($this->getVersion(), $constraints)) {
@@ -53,8 +53,13 @@ final class TarantoolVersionRequirement implements Requirement
         }
 
         $version = $this->client->call('box.info')[0]['version'];
-        // normalize 2.2.1-3-g878e2a42c to 2.2.1.3
+
+        // Normalize 2.2.1-3-g878e2a42c to 2.2.1.3.
         $version = preg_replace('/-(\d+)-[^-]+$/', '.$1', $version);
+
+        // Treat "entrypoint" versions as "dev",
+        // so 2.11.0-entrypoint.8 becomes 2.11.0-dev+entrypoint.8.
+        $version = preg_replace('/(\d)-entrypoint/', '$1-dev+entrypoint', $version);
 
         return $this->version = $version;
     }

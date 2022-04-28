@@ -83,6 +83,15 @@ final class TarantoolVersionRequirementTest extends TestCase
             [$v2_3_1_3, '< 2.3.2'],
             [$v2_3_1_3, '< 2.4'],
             [$v2_3_1_3, '< 3'],
+
+            // @see https://github.com/tarantool/tarantool/discussions/6182
+            ['2.11.0-entrypoint', '< 2.11.0-alpha'],
+            ['2.11.0-entrypoint.8', '< 2.11.0-alpha'],
+            ['2.11.0-entrypoint.8', '< 2.11.1'],
+            ['2.11.0-entrypoint', '= 2.11.0-dev'],
+            ['2.11.0-entrypoint.8', '= 2.11.0-dev'],
+            ['2.11.0-entrypoint.8-g878e2a42c', '= 2.11.0-dev'],
+            ['2.11.0-entrypoint-17-g878e2a42c-dev', '= 2.11.0-dev'],
         ];
     }
 
@@ -93,7 +102,7 @@ final class TarantoolVersionRequirementTest extends TestCase
     {
         $mockClient = $this->getTestDoubleClientBuilder()
             ->shouldHandle(
-                new CallRequest('box.info'), // $this->logicalOr()
+                new CallRequest('box.info'),
                 TestDoubleFactory::createResponseFromData([['version' => $serverVersion]]))
             ->build();
 
