@@ -18,7 +18,6 @@ use PHPUnitExtras\Annotation\Annotations as BaseAnnotations;
 use Tarantool\Client\Client;
 use Tarantool\PhpUnit\Annotation\Processor\LuaProcessor;
 use Tarantool\PhpUnit\Annotation\Processor\SqlProcessor;
-use Tarantool\PhpUnit\Annotation\Requirement\ClientPackerRequirement;
 use Tarantool\PhpUnit\Annotation\Requirement\LuaConditionRequirement;
 use Tarantool\PhpUnit\Annotation\Requirement\TarantoolVersionRequirement;
 
@@ -35,7 +34,6 @@ trait Annotations
         return $this->createBaseAnnotationProcessorBuilder()
             ->addProcessor(new LuaProcessor($client))
             ->addProcessor(new SqlProcessor($client))
-            ->addRequirement(new ClientPackerRequirement($client))
             ->addRequirement(new LuaConditionRequirement($client))
             ->addRequirement(new TarantoolVersionRequirement($client))
         ;

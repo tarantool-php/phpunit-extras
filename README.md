@@ -15,7 +15,6 @@ It is based on [rybakit/phpunit-extras](https://github.com/rybakit/phpunit-extra
      * [Lua](#lua)
      * [Sql](#sql)
    * [Requirements](#requirements)
-     * [ClientPacker](#clientpacker)
      * [LuaCondition](#luacondition)
      * [TarantoolVersion](#tarantoolversion)
  * [Expectations](#expectations)
@@ -151,27 +150,6 @@ public function testExecuteQueryFetchesAllRows() : void
 ### Requirements
 
 Requirements allow skipping tests based on preconditions.
-
-#### ClientPacker
-
-*Format:*
-
-```
-@requires clientPacker <packer>
-```
-where `<packer>` is either `pure`, `pecl`, or a fully qualified class name, e.g. `Tarantool\Client\Packer\PurePacker`.
-
-*Example:*
-
-```php
-/**
- * @requires clientPacker pure 
- */
-public function testPackerUnpacksBigIntegerAsDecimal() : void
-{
-    // ...
-}
-```
 
 #### LuaCondition
 
