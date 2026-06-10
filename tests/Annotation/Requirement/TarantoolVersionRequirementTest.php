@@ -39,7 +39,7 @@ final class TarantoolVersionRequirementTest extends TestCase
         self::assertNull($requirement->check($constraints));
     }
 
-    public function provideCheckPassesForValidConstraintsData() : iterable
+    public static function provideCheckPassesForValidConstraintsData() : iterable
     {
         $v2_3_1_3 = '2.3.1-3-g878e2a42c';
 
@@ -112,7 +112,7 @@ final class TarantoolVersionRequirementTest extends TestCase
         self::assertSame($errorMessage, $requirement->check($constraints));
     }
 
-    public function provideCheckFailsForInvalidConstraintsData() : iterable
+    public static function provideCheckFailsForInvalidConstraintsData() : iterable
     {
         $v2_3_1_3 = '2.3.1-3-g878e2a42c';
 

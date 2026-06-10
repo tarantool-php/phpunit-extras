@@ -49,18 +49,6 @@ final class TestDoubleClientBuilder
         $this->responses = [TestDoubleFactory::createEmptyResponse()];
     }
 
-    public static function buildDummy() : Client
-    {
-        /**
-         * @psalm-suppress InternalMethod
-         * @psalm-suppress PropertyNotSetInConstructor
-         */
-        $self = new self(new class() extends TestCase {
-        });
-
-        return $self->build();
-    }
-
     /**
      * @param Request|Constraint|int $request
      * @param Request|Constraint|int ...$requests
@@ -77,39 +65,9 @@ final class TestDoubleClientBuilder
         return $this;
     }
 
-    /**
-     * @param Request|Constraint|int $request
-     * @param Response ...$responses
-     */
-    public function shouldHandle($request, ...$responses) : self
-    {
-        $this->shouldSend($request);
-        $this->willReceive(...$responses);
-
-        if ($responses) {
-            $this->shouldBeCalledTimes = \count($responses);
-        }
-
-        return $this;
-    }
-
     public function willReceive(Response $response, Response ...$responses) : self
     {
         $this->responses = \func_get_args();
-
-        return $this;
-    }
-
-    public function willUseConnection(Connection $connection) : self
-    {
-        $this->connection = $connection;
-
-        return $this;
-    }
-
-    public function willUsePacker(Packer $packer) : self
-    {
-        $this->packer = $packer;
 
         return $this;
     }
@@ -137,7 +95,21 @@ final class TestDoubleClientBuilder
             : $handler->method('handle');
 
         if ($this->requests) {
-            $handleMocker->withConsecutive(...array_chunk($this->requests, 1));
+            $invocationCount = 0;
+            $requests = $this->requests;
+            $handleMocker->with(TestCase::callback(static function ($request) use (&$invocationCount, $requests) {
+                if (!isset($requests[$invocationCount])) {
+                    $invocationCount++;
+                    return true;
+                }
+                $expected = $requests[$invocationCount++];
+                
+                if ($expected instanceof Constraint) {
+                    return (bool) $expected->evaluate($request, '', true);
+                }
+                
+                return $expected == $request;
+            }));
         }
 
         if (1 === \count($this->responses)) {

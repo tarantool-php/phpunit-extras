@@ -27,4 +27,9 @@ final class AnnotationExtension extends BaseAnnotationExtension
 
         return TestDoubleClientBuilder::buildDummy();
     }
+
+    public function doParseParameters(array $parameters) : void
+    {
+        $this->parseParameters(\PHPUnit\Runner\Extension\ParameterCollection::fromArray($parameters));
+    }
 }

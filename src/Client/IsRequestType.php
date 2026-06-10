@@ -25,18 +25,20 @@ final class IsRequestType extends Constraint
     public function __construct(int $requestType)
     {
         // needed for backward compatibility with PHPUnit 7
-        if (\is_callable('parent::__construct')) {
+        if (\method_exists(parent::class, '__construct')) {
             parent::__construct();
         }
 
         $this->requestType = $requestType;
     }
 
+    #[\Override]
     public function toString() : string
     {
         return sprintf('is a "%s" request', strtoupper(RequestTypes::getName($this->requestType)));
     }
 
+    #[\Override]
     protected function matches($other) : bool
     {
         return $other instanceof Request && $other->getType() === $this->requestType;

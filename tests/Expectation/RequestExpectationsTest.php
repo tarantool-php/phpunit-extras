@@ -33,7 +33,7 @@ final class RequestExpectationsTest extends TestCase
     {
         // increase values for eval requests
         // to eliminate RequestCounter's count adjustments
-        if ('Eval' === $this->getProvidedData()[0]) {
+        if ('Eval' === $this->providedData()[0]) {
             ++$this->oldValue;
             $this->newValue += 2;
         }
@@ -47,7 +47,7 @@ final class RequestExpectationsTest extends TestCase
             ->build();
     }
 
-    public function provideRequestNames() : iterable
+    public static function provideRequestNames() : iterable
     {
         return [
             ['Auth'],

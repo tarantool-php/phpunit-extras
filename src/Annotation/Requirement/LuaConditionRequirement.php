@@ -25,11 +25,13 @@ final class LuaConditionRequirement implements Requirement
         $this->client = $client;
     }
 
+    #[\Override]
     public function getName() : string
     {
         return 'luaCondition';
     }
 
+    #[\Override]
     public function check(string $value) : ?string
     {
         [$result] = $this->client->evaluate("return ($value)");
