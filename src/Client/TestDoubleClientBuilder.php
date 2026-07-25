@@ -94,6 +94,20 @@ final class TestDoubleClientBuilder
         return $this;
     }
 
+    public function willUseConnection(Connection $connection) : self
+    {
+        $this->connection = $connection;
+
+        return $this;
+    }
+
+    public function willUsePacker(Packer $packer) : self
+    {
+        $this->packer = $packer;
+
+        return $this;
+    }
+
     public function build() : Client
     {
         /** @var Handler $handler */

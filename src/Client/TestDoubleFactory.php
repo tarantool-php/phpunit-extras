@@ -32,4 +32,25 @@ final class TestDoubleFactory
     {
         return self::createResponseFromData([null]);
     }
+
+    public static function createErrorResponse(string $errorMessage = '', int $errorCode = 0) : Response
+    {
+        return self::createResponse(
+            [Keys::ERROR_24 => $errorMessage],
+            [Keys::CODE => Response::TYPE_ERROR + $errorCode]
+        );
+    }
+
+    public static function createErrorResponseFromStack(array $errorStack) : Response
+    {
+        $errorMessage = $errorStack[0][Keys::ERROR_MESSAGE] ?? '';
+        $errorCode =  $errorStack[0][Keys::ERROR_CODE] ?? 0;
+
+        return self::createResponse([
+            Keys::ERROR_24 => $errorMessage,
+            Keys::ERROR => [Keys::ERROR_STACK => $errorStack],
+        ], [
+            Keys::CODE => Response::TYPE_ERROR + $errorCode,
+        ]);
+    }
 }
