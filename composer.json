@@ -42,8 +42,7 @@
     "minimum-stability": "dev",
     "prefer-stable": true,
     "repositories": [{
-        "name": "local",
-        "type": "path",
-        "url": "/Users/gen/dev/php/phpunit-extras"
+        "type": "vcs",
+        "url": "https://github.com/rybakit/phpunit-extras"
     }]
 }
