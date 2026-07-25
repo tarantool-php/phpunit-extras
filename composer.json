@@ -11,7 +11,7 @@
         }
     ],
     "require": {
-        "php": ">=8.2",
+        "php": "^8.2",
         "composer/package-versions-deprecated": "^1.11",
         "composer/semver": "^3.3",
         "rybakit/phpunit-extras": "dev-feature/php82-phpunit10-attributes-migration",
