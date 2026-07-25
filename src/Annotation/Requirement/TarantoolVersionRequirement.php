@@ -45,7 +45,7 @@ final class TarantoolVersionRequirement implements Requirement
             return null;
         }
 
-        return sprintf('%s version %s is required', $this->getName(), $value);
+        return \sprintf('%s version %s is required', $this->getName(), $value);
     }
 
     private function getVersion() : string

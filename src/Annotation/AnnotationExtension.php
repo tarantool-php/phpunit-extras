@@ -27,8 +27,6 @@ class AnnotationExtension extends BaseAnnotationExtension
     /** @var Client|null */
     private $client;
 
-
-
     #[\Override]
     public function bootstrap(\PHPUnit\TextUI\Configuration\Configuration $configuration, \PHPUnit\Runner\Extension\Facade $facade, \PHPUnit\Runner\Extension\ParameterCollection $parameters) : void
     {
@@ -50,7 +48,7 @@ class AnnotationExtension extends BaseAnnotationExtension
             }, $parameters, \PHPUnit\Runner\Extension\ParameterCollection::class);
             $options = $closure ? $closure() : [];
 
-            if ($options !== []) {
+            if ([] !== $options) {
                 $this->clientConfig = $options;
             }
         }
@@ -98,7 +96,7 @@ class AnnotationExtension extends BaseAnnotationExtension
                 return $value;
             }
 
-            $errorMessage = sprintf('Environment variable "%s" does not exist', $matches['name']);
+            $errorMessage = \sprintf('Environment variable "%s" does not exist', $matches['name']);
             throw new class($errorMessage) extends \RuntimeException implements Exception { };
         }, $configValue);
     }

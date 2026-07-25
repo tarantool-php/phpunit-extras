@@ -104,7 +104,7 @@ final class TarantoolVersionRequirementTest extends TestCase
             ->build();
 
         $requirement = new TarantoolVersionRequirement($mockClient);
-        $errorMessage = sprintf('Tarantool version %s is required', $constraints);
+        $errorMessage = \sprintf('Tarantool version %s is required', $constraints);
 
         self::assertSame($errorMessage, $requirement->check($constraints));
     }

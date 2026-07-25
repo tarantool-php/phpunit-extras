@@ -41,7 +41,7 @@ final class TestDoubleClientBuilder
     private $packer;
 
     /** @var int|null */
-    private $shouldBeCalledTimes = null;
+    private $shouldBeCalledTimes;
 
     public function __construct(TestCase $testCase)
     {
@@ -53,6 +53,7 @@ final class TestDoubleClientBuilder
     {
         /** @psalm-suppress InternalMethod */
         $self = new self(new class('dummy') extends TestCase {});
+
         return $self->build();
     }
 
@@ -135,16 +136,17 @@ final class TestDoubleClientBuilder
             $requests = $this->requests;
             $handleMocker->with(TestCase::callback(static function ($request) use (&$invocationCount, $requests) {
                 if (!isset($requests[$invocationCount])) {
-                    $invocationCount++;
+                    ++$invocationCount;
+
                     return true;
                 }
                 $expected = $requests[$invocationCount++];
-                
+
                 if ($expected instanceof Constraint) {
                     return (bool) $expected->evaluate($request, '', true);
                 }
-                
-                return $expected == $request;
+
+                return $expected === $request;
             }));
         }
 

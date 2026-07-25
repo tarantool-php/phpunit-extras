@@ -40,6 +40,6 @@ final class LuaConditionRequirement implements Requirement
             return null;
         }
 
-        return sprintf('"%s" is not evaluated to true', $value);
+        return \sprintf('"%s" is not evaluated to true', $value);
     }
 }

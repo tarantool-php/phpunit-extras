@@ -23,6 +23,7 @@ final class AnnotationExtensionTest extends TestCase
         $ext = new AnnotationExtension();
         $ext->doParseParameters($parameters);
         $ext->processTestAttributes(self::class, $method);
+
         return $ext;
     }
 

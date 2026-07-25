@@ -50,7 +50,7 @@ final class LuaConditionRequirementTest extends TestCase
             )
             ->build();
 
-        $errorMessage = sprintf('"%s" is not evaluated to true', $luaExpression);
+        $errorMessage = \sprintf('"%s" is not evaluated to true', $luaExpression);
         $requirement = new LuaConditionRequirement($mockClient);
 
         self::assertSame($errorMessage, $requirement->check($luaExpression));
