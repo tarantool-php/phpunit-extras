@@ -13,8 +13,9 @@ declare(strict_types=1);
 
 namespace Tarantool\PhpUnit\Tests\Annotation\Requirement;
 
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
-use Tarantool\Client\Request\CallRequest;
+use Tarantool\Client\Request\EvaluateRequest;
 use Tarantool\PhpUnit\Annotation\Requirement\TarantoolVersionRequirement;
 use Tarantool\PhpUnit\Client\TestDoubleClient;
 use Tarantool\PhpUnit\Client\TestDoubleFactory;
@@ -23,15 +24,13 @@ final class TarantoolVersionRequirementTest extends TestCase
 {
     use TestDoubleClient;
 
-    /**
-     * @dataProvider provideCheckPassesForValidConstraintsData()
-     */
+    #[DataProvider('provideCheckPassesForValidConstraintsData')]
     public function testCheckPassesForValidConstraints(string $serverVersion, string $constraints) : void
     {
         $mockClient = $this->getTestDoubleClientBuilder()
             ->shouldHandle(
-                new CallRequest('box.info'),
-                TestDoubleFactory::createResponseFromData([['version' => $serverVersion]]))
+                new EvaluateRequest('return box.info.version'),
+                TestDoubleFactory::createResponseFromData([$serverVersion]))
             ->build();
 
         $requirement = new TarantoolVersionRequirement($mockClient);
@@ -95,15 +94,13 @@ final class TarantoolVersionRequirementTest extends TestCase
         ];
     }
 
-    /**
-     * @dataProvider provideCheckFailsForInvalidConstraintsData()
-     */
+    #[DataProvider('provideCheckFailsForInvalidConstraintsData')]
     public function testCheckFailsForInvalidConstraints(string $serverVersion, string $constraints) : void
     {
         $mockClient = $this->getTestDoubleClientBuilder()
             ->shouldHandle(
-                new CallRequest('box.info'),
-                TestDoubleFactory::createResponseFromData([['version' => $serverVersion]]))
+                new EvaluateRequest('return box.info.version'),
+                TestDoubleFactory::createResponseFromData([$serverVersion]))
             ->build();
 
         $requirement = new TarantoolVersionRequirement($mockClient);

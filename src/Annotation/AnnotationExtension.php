@@ -17,7 +17,7 @@ use PHPUnit\Exception;
 use PHPUnitExtras\Annotation\AnnotationExtension as BaseAnnotationExtension;
 use Tarantool\Client\Client;
 
-final class AnnotationExtension extends BaseAnnotationExtension
+class AnnotationExtension extends BaseAnnotationExtension
 {
     use Annotations;
 

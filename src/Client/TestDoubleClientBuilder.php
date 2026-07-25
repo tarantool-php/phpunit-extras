@@ -49,6 +49,13 @@ final class TestDoubleClientBuilder
         $this->responses = [TestDoubleFactory::createEmptyResponse()];
     }
 
+    public static function buildDummy() : Client
+    {
+        /** @psalm-suppress InternalMethod */
+        $self = new self(new class('dummy') extends TestCase {});
+        return $self->build();
+    }
+
     /**
      * @param Request|Constraint|int $request
      * @param Request|Constraint|int ...$requests
@@ -61,6 +68,21 @@ final class TestDoubleClientBuilder
         }
 
         $this->shouldBeCalledTimes = \count($this->requests);
+
+        return $this;
+    }
+
+    /**
+     * @param Request|Constraint|int $request
+     */
+    public function shouldHandle($request, Response ...$responses) : self
+    {
+        $this->shouldSend($request);
+        $this->willReceive(...$responses);
+
+        if ($responses) {
+            $this->shouldBeCalledTimes = \count($responses);
+        }
 
         return $this;
     }
