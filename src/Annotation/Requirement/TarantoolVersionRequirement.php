@@ -54,7 +54,7 @@ final class TarantoolVersionRequirement implements Requirement
             return $this->version;
         }
 
-        $version = $this->client->evaluate('return box.info.version')[0];
+        $version = $this->client->call('box.info')[0]['version'];
         if (!\is_string($version)) {
             throw new \UnexpectedValueException('Tarantool version must be a string');
         }

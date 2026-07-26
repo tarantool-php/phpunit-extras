@@ -15,7 +15,7 @@ namespace Tarantool\PhpUnit\Tests\Annotation\Requirement;
 
 use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
-use Tarantool\Client\Request\EvaluateRequest;
+use Tarantool\Client\Request\CallRequest;
 use Tarantool\PhpUnit\Annotation\Requirement\TarantoolVersionRequirement;
 use Tarantool\PhpUnit\Client\TestDoubleClient;
 use Tarantool\PhpUnit\Client\TestDoubleFactory;
@@ -29,8 +29,8 @@ final class TarantoolVersionRequirementTest extends TestCase
     {
         $mockClient = $this->getTestDoubleClientBuilder()
             ->shouldHandle(
-                new EvaluateRequest('return box.info.version'),
-                TestDoubleFactory::createResponseFromData([$serverVersion]))
+                new CallRequest('box.info'),
+                TestDoubleFactory::createResponseFromData([['version' => $serverVersion]]))
             ->build();
 
         $requirement = new TarantoolVersionRequirement($mockClient);
@@ -99,8 +99,8 @@ final class TarantoolVersionRequirementTest extends TestCase
     {
         $mockClient = $this->getTestDoubleClientBuilder()
             ->shouldHandle(
-                new EvaluateRequest('return box.info.version'),
-                TestDoubleFactory::createResponseFromData([$serverVersion]))
+                new CallRequest('box.info'),
+                TestDoubleFactory::createResponseFromData([['version' => $serverVersion]]))
             ->build();
 
         $requirement = new TarantoolVersionRequirement($mockClient);
