@@ -146,7 +146,9 @@ final class TestDoubleClientBuilder
                     return (bool) $expected->evaluate($request, '', true);
                 }
 
-                return $expected === $request;
+                $constraint = new \PHPUnit\Framework\Constraint\IsEqual($expected);
+
+                return (bool) $constraint->evaluate($request, '', true);
             }));
         }
 
