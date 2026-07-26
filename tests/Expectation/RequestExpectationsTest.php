@@ -13,6 +13,7 @@ declare(strict_types=1);
 
 namespace Tarantool\PhpUnit\Tests\Expectation;
 
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\ExpectationFailedException;
 use PHPUnitExtras\TestCase;
 use Tarantool\Client\Client;
@@ -33,7 +34,7 @@ final class RequestExpectationsTest extends TestCase
     {
         // increase values for eval requests
         // to eliminate RequestCounter's count adjustments
-        if ('Eval' === $this->getProvidedData()[0]) {
+        if ('Eval' === $this->providedData()[0]) {
             ++$this->oldValue;
             $this->newValue += 2;
         }
@@ -47,7 +48,7 @@ final class RequestExpectationsTest extends TestCase
             ->build();
     }
 
-    public function provideRequestNames() : iterable
+    public static function provideRequestNames() : iterable
     {
         return [
             ['Auth'],
@@ -63,9 +64,7 @@ final class RequestExpectationsTest extends TestCase
         ];
     }
 
-    /**
-     * @dataProvider provideRequestNames
-     */
+    #[DataProvider('provideRequestNames')]
     public function testExpectToBeCalledSucceeds(string $requestName) : void
     {
         $this->oldValue = 1;
@@ -74,9 +73,7 @@ final class RequestExpectationsTest extends TestCase
         $this->verifyExpectations();
     }
 
-    /**
-     * @dataProvider provideRequestNames
-     */
+    #[DataProvider('provideRequestNames')]
     public function testExpectToBeCalledFails(string $requestName) : void
     {
         $this->oldValue = 1;
@@ -87,9 +84,7 @@ final class RequestExpectationsTest extends TestCase
         $this->verifyExpectations();
     }
 
-    /**
-     * @dataProvider provideRequestNames
-     */
+    #[DataProvider('provideRequestNames')]
     public function testExpectToBeCalledAtLeastSucceeds(string $requestName) : void
     {
         $this->oldValue = 1;
@@ -98,9 +93,7 @@ final class RequestExpectationsTest extends TestCase
         $this->verifyExpectations();
     }
 
-    /**
-     * @dataProvider provideRequestNames
-     */
+    #[DataProvider('provideRequestNames')]
     public function testExpectToBeCalledAtLeastFails(string $requestName) : void
     {
         $this->oldValue = 1;
@@ -111,9 +104,7 @@ final class RequestExpectationsTest extends TestCase
         $this->verifyExpectations();
     }
 
-    /**
-     * @dataProvider provideRequestNames
-     */
+    #[DataProvider('provideRequestNames')]
     public function testExpectToBeCalledAtMostSucceeds(string $requestName) : void
     {
         $this->oldValue = 1;
@@ -122,9 +113,7 @@ final class RequestExpectationsTest extends TestCase
         $this->verifyExpectations();
     }
 
-    /**
-     * @dataProvider provideRequestNames
-     */
+    #[DataProvider('provideRequestNames')]
     public function testExpectToBeCalledAtMostFails(string $requestName) : void
     {
         $this->oldValue = 1;
@@ -135,9 +124,7 @@ final class RequestExpectationsTest extends TestCase
         $this->verifyExpectations();
     }
 
-    /**
-     * @dataProvider provideRequestNames
-     */
+    #[DataProvider('provideRequestNames')]
     public function testExpectToBeCalledOnceSucceeds(string $requestName) : void
     {
         $this->oldValue = 1;
@@ -146,9 +133,7 @@ final class RequestExpectationsTest extends TestCase
         $this->verifyExpectations();
     }
 
-    /**
-     * @dataProvider provideRequestNames
-     */
+    #[DataProvider('provideRequestNames')]
     public function testExpectToBeCalledOnceFails(string $requestName) : void
     {
         $this->oldValue = 1;
@@ -159,9 +144,7 @@ final class RequestExpectationsTest extends TestCase
         $this->verifyExpectations();
     }
 
-    /**
-     * @dataProvider provideRequestNames
-     */
+    #[DataProvider('provideRequestNames')]
     public function testExpectToBeNeverCalledSucceeds(string $requestName) : void
     {
         $this->oldValue = 1;
@@ -170,9 +153,7 @@ final class RequestExpectationsTest extends TestCase
         $this->verifyExpectations();
     }
 
-    /**
-     * @dataProvider provideRequestNames
-     */
+    #[DataProvider('provideRequestNames')]
     public function testExpectToBeNeverCalledFails(string $requestName) : void
     {
         $this->oldValue = 1;
@@ -183,9 +164,7 @@ final class RequestExpectationsTest extends TestCase
         $this->verifyExpectations();
     }
 
-    /**
-     * @dataProvider provideRequestNames
-     */
+    #[DataProvider('provideRequestNames')]
     public function testExpectToBeCalledAtLeastOnceSucceeds(string $requestName) : void
     {
         $this->oldValue = 1;
@@ -194,9 +173,7 @@ final class RequestExpectationsTest extends TestCase
         $this->verifyExpectations();
     }
 
-    /**
-     * @dataProvider provideRequestNames
-     */
+    #[DataProvider('provideRequestNames')]
     public function testExpectToBeCalledAtLeastOnceFails(string $requestName) : void
     {
         $this->oldValue = 1;
@@ -207,9 +184,7 @@ final class RequestExpectationsTest extends TestCase
         $this->verifyExpectations();
     }
 
-    /**
-     * @dataProvider provideRequestNames
-     */
+    #[DataProvider('provideRequestNames')]
     public function testExpectToBeCalledAtMostOnceSucceeds(string $requestName) : void
     {
         $this->oldValue = 1;
@@ -218,9 +193,7 @@ final class RequestExpectationsTest extends TestCase
         $this->verifyExpectations();
     }
 
-    /**
-     * @dataProvider provideRequestNames
-     */
+    #[DataProvider('provideRequestNames')]
     public function testExpectToBeCalledAtMostOnceFails(string $requestName) : void
     {
         $this->oldValue = 1;

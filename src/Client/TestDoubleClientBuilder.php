@@ -41,7 +41,7 @@ final class TestDoubleClientBuilder
     private $packer;
 
     /** @var int|null */
-    private $shouldBeCalledTimes = null;
+    private $shouldBeCalledTimes;
 
     public function __construct(TestCase $testCase)
     {
@@ -51,12 +51,8 @@ final class TestDoubleClientBuilder
 
     public static function buildDummy() : Client
     {
-        /**
-         * @psalm-suppress InternalMethod
-         * @psalm-suppress PropertyNotSetInConstructor
-         */
-        $self = new self(new class() extends TestCase {
-        });
+        /** @psalm-suppress InternalMethod */
+        $self = new self(new class('dummy') extends TestCase {});
 
         return $self->build();
     }
@@ -79,9 +75,8 @@ final class TestDoubleClientBuilder
 
     /**
      * @param Request|Constraint|int $request
-     * @param Response ...$responses
      */
-    public function shouldHandle($request, ...$responses) : self
+    public function shouldHandle($request, Response ...$responses) : self
     {
         $this->shouldSend($request);
         $this->willReceive(...$responses);
@@ -137,7 +132,24 @@ final class TestDoubleClientBuilder
             : $handler->method('handle');
 
         if ($this->requests) {
-            $handleMocker->withConsecutive(...array_chunk($this->requests, 1));
+            $invocationCount = 0;
+            $requests = $this->requests;
+            $handleMocker->with(TestCase::callback(static function ($request) use (&$invocationCount, $requests) {
+                if (!isset($requests[$invocationCount])) {
+                    ++$invocationCount;
+
+                    return true;
+                }
+                $expected = $requests[$invocationCount++];
+
+                if ($expected instanceof Constraint) {
+                    return (bool) $expected->evaluate($request, '', true);
+                }
+
+                $constraint = new \PHPUnit\Framework\Constraint\IsEqual($expected);
+
+                return (bool) $constraint->evaluate($request, '', true);
+            }));
         }
 
         if (1 === \count($this->responses)) {

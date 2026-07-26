@@ -22,19 +22,39 @@ class AnnotationExtension extends BaseAnnotationExtension
     use Annotations;
 
     /** @var array<string, string|int|bool>|string */
-    private $clientConfig;
+    private $clientConfig = 'tcp://127.0.0.1:3301';
 
     /** @var Client|null */
     private $client;
 
-    /**
-     * @param array<string, string|int|bool>|string $clientConfig
-     */
-    public function __construct($clientConfig = 'tcp://127.0.0.1:3301')
+    #[\Override]
+    public function bootstrap(\PHPUnit\TextUI\Configuration\Configuration $configuration, \PHPUnit\Runner\Extension\Facade $facade, \PHPUnit\Runner\Extension\ParameterCollection $parameters) : void
     {
-        $this->clientConfig = $clientConfig;
+        $this->parseParameters($parameters);
+        parent::bootstrap($configuration, $facade, $parameters);
     }
 
+    protected function parseParameters(\PHPUnit\Runner\Extension\ParameterCollection $parameters) : void
+    {
+        if ($parameters->has('dsn')) {
+            $this->clientConfig = $parameters->get('dsn');
+        } else {
+            $closure = \Closure::bind(function () {
+                /**
+                 * @psalm-suppress InaccessibleProperty
+                 * @var \PHPUnit\Runner\Extension\ParameterCollection $this
+                 */
+                return $this->parameters;
+            }, $parameters, \PHPUnit\Runner\Extension\ParameterCollection::class);
+            $options = $closure ? $closure() : [];
+
+            if ([] !== $options) {
+                $this->clientConfig = $options;
+            }
+        }
+    }
+
+    #[\Override]
     protected function getClient() : Client
     {
         if ($this->client) {
@@ -71,12 +91,12 @@ class AnnotationExtension extends BaseAnnotationExtension
 
     private static function resolveEnvValues(string $configValue) : string
     {
-        return preg_replace_callback('/%env\((?P<name>.+?)\)%/', static function (array $matches) : string {
+        return (string) preg_replace_callback('/%env\((?P<name>.+?)\)%/', static function (array $matches) : string {
             if (false !== $value = getenv($matches['name'])) {
                 return $value;
             }
 
-            $errorMessage = sprintf('Environment variable "%s" does not exist', $matches['name']);
+            $errorMessage = \sprintf('Environment variable "%s" does not exist', $matches['name']);
             throw new class($errorMessage) extends \RuntimeException implements Exception { };
         }, $configValue);
     }

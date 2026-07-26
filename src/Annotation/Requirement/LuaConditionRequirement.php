@@ -25,11 +25,13 @@ final class LuaConditionRequirement implements Requirement
         $this->client = $client;
     }
 
+    #[\Override]
     public function getName() : string
     {
         return 'luaCondition';
     }
 
+    #[\Override]
     public function check(string $value) : ?string
     {
         [$result] = $this->client->evaluate("return ($value)");
@@ -38,6 +40,6 @@ final class LuaConditionRequirement implements Requirement
             return null;
         }
 
-        return sprintf('"%s" is not evaluated to true', $value);
+        return \sprintf('"%s" is not evaluated to true', $value);
     }
 }

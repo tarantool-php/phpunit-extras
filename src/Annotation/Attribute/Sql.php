@@ -11,18 +11,18 @@
 
 declare(strict_types=1);
 
-namespace Tarantool\PhpUnit\Annotation\Processor;
+namespace Tarantool\PhpUnit\Annotation\Attribute;
 
-use PHPUnitExtras\Annotation\Processor\Processor;
-use Tarantool\Client\Client;
+use PHPUnitExtras\Annotation\Attribute\AnnotationAttribute;
 
-final class SqlProcessor implements Processor
+#[\Attribute(\Attribute::TARGET_CLASS | \Attribute::TARGET_METHOD | \Attribute::IS_REPEATABLE)]
+final class Sql implements AnnotationAttribute
 {
-    private $client;
+    private $code;
 
-    public function __construct(Client $client)
+    public function __construct(string $code)
     {
-        $this->client = $client;
+        $this->code = $code;
     }
 
     #[\Override]
@@ -32,8 +32,8 @@ final class SqlProcessor implements Processor
     }
 
     #[\Override]
-    public function process(string $value) : void
+    public function getValue() : string
     {
-        $this->client->executeUpdate($value);
+        return $this->code;
     }
 }

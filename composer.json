@@ -11,17 +11,17 @@
         }
     ],
     "require": {
-        "php": "^7.2.5|^8",
-        "composer/package-versions-deprecated": "1.11.99.5",
+        "php": "^8.2",
+        "composer/package-versions-deprecated": "^1.11",
         "composer/semver": "^3.3",
-        "rybakit/phpunit-extras": "^0.2.4",
-        "symfony/expression-language": "^3.3|^4|^5|^6",
+        "rybakit/phpunit-extras": "dev-feature/php82-phpunit10-attributes-migration",
+        "symfony/expression-language": "^7.0",
         "tarantool/client": "^0.10"
     },
     "require-dev": {
-        "php": "^7.2.5|^8",
-        "friendsofphp/php-cs-fixer": "^2.19",
-        "vimeo/psalm": "^3.9|^4"
+        "friendsofphp/php-cs-fixer": "^3",
+        "phpunit/phpunit": "^10.5",
+        "vimeo/psalm": "^5.23|^6"
     },
     "autoload": {
         "psr-4": {
@@ -38,5 +38,12 @@
             "*": "dist"
         },
         "sort-packages": true
-    }
+    },
+    "minimum-stability": "dev",
+    "prefer-stable": true,
+    "repositories": [{
+        "type": "vcs",
+        "url": "https://github.com/rybakit/phpunit-extras",
+        "no-api": true
+    }]
 }

@@ -13,6 +13,7 @@ declare(strict_types=1);
 
 namespace Tarantool\PhpUnit\Tests\Annotation\Requirement;
 
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
 use Tarantool\Client\Request\CallRequest;
 use Tarantool\PhpUnit\Annotation\Requirement\TarantoolVersionRequirement;
@@ -23,9 +24,7 @@ final class TarantoolVersionRequirementTest extends TestCase
 {
     use TestDoubleClient;
 
-    /**
-     * @dataProvider provideCheckPassesForValidConstraintsData()
-     */
+    #[DataProvider('provideCheckPassesForValidConstraintsData')]
     public function testCheckPassesForValidConstraints(string $serverVersion, string $constraints) : void
     {
         $mockClient = $this->getTestDoubleClientBuilder()
@@ -39,7 +38,7 @@ final class TarantoolVersionRequirementTest extends TestCase
         self::assertNull($requirement->check($constraints));
     }
 
-    public function provideCheckPassesForValidConstraintsData() : iterable
+    public static function provideCheckPassesForValidConstraintsData() : iterable
     {
         $v2_3_1_3 = '2.3.1-3-g878e2a42c';
 
@@ -95,9 +94,7 @@ final class TarantoolVersionRequirementTest extends TestCase
         ];
     }
 
-    /**
-     * @dataProvider provideCheckFailsForInvalidConstraintsData()
-     */
+    #[DataProvider('provideCheckFailsForInvalidConstraintsData')]
     public function testCheckFailsForInvalidConstraints(string $serverVersion, string $constraints) : void
     {
         $mockClient = $this->getTestDoubleClientBuilder()
@@ -107,12 +104,12 @@ final class TarantoolVersionRequirementTest extends TestCase
             ->build();
 
         $requirement = new TarantoolVersionRequirement($mockClient);
-        $errorMessage = sprintf('Tarantool version %s is required', $constraints);
+        $errorMessage = \sprintf('Tarantool version %s is required', $constraints);
 
         self::assertSame($errorMessage, $requirement->check($constraints));
     }
 
-    public function provideCheckFailsForInvalidConstraintsData() : iterable
+    public static function provideCheckFailsForInvalidConstraintsData() : iterable
     {
         $v2_3_1_3 = '2.3.1-3-g878e2a42c';
 
