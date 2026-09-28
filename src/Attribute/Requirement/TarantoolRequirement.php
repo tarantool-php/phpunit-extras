@@ -19,9 +19,9 @@ use PHPUnitExtras\Attribute\ProcessableAttribute;
 use PHPUnitExtras\Attribute\Requirement\Requirement;
 use PHPUnitExtras\Attribute\Target;
 use Tarantool\Client\Client;
-use Tarantool\PhpUnit\Attribute\RequiresTarantoolVersion;
+use Tarantool\PhpUnit\Attribute\RequiresTarantool;
 
-final class TarantoolVersionRequirement implements Requirement
+final class TarantoolRequirement implements Requirement
 {
     private Client $client;
 
@@ -36,14 +36,14 @@ final class TarantoolVersionRequirement implements Requirement
     #[\Override]
     public function getAttributeClass() : string
     {
-        return RequiresTarantoolVersion::class;
+        return RequiresTarantool::class;
     }
 
     #[\Override]
     public function check(ProcessableAttribute $attribute, Target $target, PlaceholderResolver $placeholderResolver) : ?string
     {
-        if (!$attribute instanceof RequiresTarantoolVersion) {
-            throw new \InvalidArgumentException('TarantoolVersionRequirement only handles RequiresTarantoolVersion attributes');
+        if (!$attribute instanceof RequiresTarantool) {
+            throw new \InvalidArgumentException('TarantoolRequirement only handles RequiresTarantool attributes');
         }
 
         $value = $placeholderResolver->resolve($attribute->constraint, $target);

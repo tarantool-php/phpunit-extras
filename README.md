@@ -16,7 +16,7 @@ It is based on [rybakit/phpunit-extras](https://github.com/rybakit/phpunit-extra
      * [Sql](#sql)
    * [Requirements](#requirements)
  * [RequiresIfLua](#requiresiflua)
- * [RequiresTarantoolVersion](#requirestarantoolversion)
+ * [RequiresTarantool](#requirestarantool)
  * [Expectations](#expectations)
    * [Requests](#requests)
    * [Prepared statements](#prepared-statements)
@@ -166,16 +166,16 @@ public function testChangeUserPassword() : void
 }
 ```
 
-#### RequiresTarantoolVersion
+#### RequiresTarantool
 where `<version-constraint>` is a composer-like version constraint. For details on supported formats, 
 please see the Composer [documentation](https://getcomposer.org/doc/articles/versions.md#writing-version-constraints).
 
 *Example:*
 
 ```php
-use Tarantool\PhpUnit\Attribute\RequiresTarantoolVersion;
+use Tarantool\PhpUnit\Attribute\RequiresTarantool;
 
-#[RequiresTarantoolVersion('^2.3.2')]
+#[RequiresTarantool('^2.3.2')]
 public function testPrepareCreatesPreparedStatement() : void
 {
     // ...

@@ -19,7 +19,7 @@ use Tarantool\Client\Client;
 use Tarantool\PhpUnit\Attribute\Processor\LuaProcessor;
 use Tarantool\PhpUnit\Attribute\Processor\SqlProcessor;
 use Tarantool\PhpUnit\Attribute\Requirement\IfLuaRequirement;
-use Tarantool\PhpUnit\Attribute\Requirement\TarantoolVersionRequirement;
+use Tarantool\PhpUnit\Attribute\Requirement\TarantoolRequirement;
 
 trait Attributes
 {
@@ -35,7 +35,7 @@ trait Attributes
             ->addProcessor(new LuaProcessor($client))
             ->addProcessor(new SqlProcessor($client))
             ->addRequirement(new IfLuaRequirement($client))
-            ->addRequirement(new TarantoolVersionRequirement($client))
+            ->addRequirement(new TarantoolRequirement($client))
         ;
     }
 

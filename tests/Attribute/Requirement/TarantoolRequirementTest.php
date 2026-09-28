@@ -18,12 +18,12 @@ use PHPUnit\Framework\TestCase;
 use PHPUnitExtras\Attribute\PlaceholderResolver\PlaceholderResolver;
 use PHPUnitExtras\Attribute\Target;
 use Tarantool\Client\Request\CallRequest;
-use Tarantool\PhpUnit\Attribute\Requirement\TarantoolVersionRequirement;
-use Tarantool\PhpUnit\Attribute\RequiresTarantoolVersion;
+use Tarantool\PhpUnit\Attribute\Requirement\TarantoolRequirement;
+use Tarantool\PhpUnit\Attribute\RequiresTarantool;
 use Tarantool\PhpUnit\Client\TestDoubleClient;
 use Tarantool\PhpUnit\Client\TestDoubleFactory;
 
-final class TarantoolVersionRequirementTest extends TestCase
+final class TarantoolRequirementTest extends TestCase
 {
     use TestDoubleClient;
 
@@ -36,9 +36,9 @@ final class TarantoolVersionRequirementTest extends TestCase
                 TestDoubleFactory::createResponseFromData([['version' => $serverVersion]]))
             ->build();
 
-        $requirement = new TarantoolVersionRequirement($mockClient);
+        $requirement = new TarantoolRequirement($mockClient);
 
-        self::assertNull($requirement->check(new RequiresTarantoolVersion($constraints), new Target(self::class), self::resolver()));
+        self::assertNull($requirement->check(new RequiresTarantool($constraints), new Target(self::class), self::resolver()));
     }
 
     public static function provideCheckPassesForValidConstraintsData() : iterable
@@ -106,10 +106,10 @@ final class TarantoolVersionRequirementTest extends TestCase
                 TestDoubleFactory::createResponseFromData([['version' => $serverVersion]]))
             ->build();
 
-        $requirement = new TarantoolVersionRequirement($mockClient);
+        $requirement = new TarantoolRequirement($mockClient);
         $errorMessage = \sprintf('Tarantool version %s is required', $constraints);
 
-        self::assertSame($errorMessage, $requirement->check(new RequiresTarantoolVersion($constraints), new Target(self::class), self::resolver()));
+        self::assertSame($errorMessage, $requirement->check(new RequiresTarantool($constraints), new Target(self::class), self::resolver()));
     }
 
     public static function provideCheckFailsForInvalidConstraintsData() : iterable
