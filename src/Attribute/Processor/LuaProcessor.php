@@ -13,12 +13,12 @@ declare(strict_types=1);
 
 namespace Tarantool\PhpUnit\Attribute\Processor;
 
-use PHPUnitExtras\Attribute\Processor\Processor;
 use PHPUnitExtras\Attribute\PlaceholderResolver\PlaceholderResolver;
 use PHPUnitExtras\Attribute\ProcessableAttribute;
+use PHPUnitExtras\Attribute\Processor\Processor;
 use PHPUnitExtras\Attribute\Target;
-use Tarantool\PhpUnit\Attribute\Lua;
 use Tarantool\Client\Client;
+use Tarantool\PhpUnit\Attribute\Lua;
 
 final class LuaProcessor implements Processor
 {

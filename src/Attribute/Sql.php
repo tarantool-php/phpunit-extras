@@ -18,5 +18,7 @@ use PHPUnitExtras\Attribute\ProcessableAttribute;
 #[\Attribute(\Attribute::TARGET_CLASS | \Attribute::TARGET_METHOD | \Attribute::IS_REPEATABLE)]
 final class Sql implements ProcessableAttribute
 {
-    public function __construct(public readonly string $code) { }
+    public function __construct(public readonly string $code)
+    {
+    }
 }

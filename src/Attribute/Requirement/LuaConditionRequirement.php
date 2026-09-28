@@ -15,10 +15,10 @@ namespace Tarantool\PhpUnit\Attribute\Requirement;
 
 use PHPUnitExtras\Attribute\PlaceholderResolver\PlaceholderResolver;
 use PHPUnitExtras\Attribute\ProcessableAttribute;
-use PHPUnitExtras\Attribute\Target;
 use PHPUnitExtras\Attribute\Requirement\Requirement;
-use Tarantool\PhpUnit\Attribute\RequiresLuaCondition;
+use PHPUnitExtras\Attribute\Target;
 use Tarantool\Client\Client;
+use Tarantool\PhpUnit\Attribute\RequiresLuaCondition;
 
 final class LuaConditionRequirement implements Requirement
 {

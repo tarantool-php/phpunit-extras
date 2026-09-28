@@ -16,10 +16,10 @@ namespace Tarantool\PhpUnit\Attribute\Requirement;
 use Composer\Semver\Semver;
 use PHPUnitExtras\Attribute\PlaceholderResolver\PlaceholderResolver;
 use PHPUnitExtras\Attribute\ProcessableAttribute;
-use PHPUnitExtras\Attribute\Target;
 use PHPUnitExtras\Attribute\Requirement\Requirement;
-use Tarantool\PhpUnit\Attribute\RequiresTarantoolVersion;
+use PHPUnitExtras\Attribute\Target;
 use Tarantool\Client\Client;
+use Tarantool\PhpUnit\Attribute\RequiresTarantoolVersion;
 
 final class TarantoolVersionRequirement implements Requirement
 {

@@ -14,11 +14,11 @@ declare(strict_types=1);
 namespace Tarantool\PhpUnit\Tests\Attribute\Requirement;
 
 use PHPUnit\Framework\TestCase;
+use PHPUnitExtras\Attribute\PlaceholderResolver\PlaceholderResolver;
+use PHPUnitExtras\Attribute\Target;
 use Tarantool\Client\Request\EvaluateRequest;
 use Tarantool\PhpUnit\Attribute\Requirement\LuaConditionRequirement;
 use Tarantool\PhpUnit\Attribute\RequiresLuaCondition;
-use PHPUnitExtras\Attribute\PlaceholderResolver\PlaceholderResolver;
-use PHPUnitExtras\Attribute\Target;
 use Tarantool\PhpUnit\Client\TestDoubleClient;
 use Tarantool\PhpUnit\Client\TestDoubleFactory;
 
@@ -62,8 +62,15 @@ final class LuaConditionRequirementTest extends TestCase
     private static function resolver() : PlaceholderResolver
     {
         return new class implements PlaceholderResolver {
-            public function getName() : string { return 'identity'; }
-            public function resolve(string $value, Target $target) : string { return $value; }
+            public function getName() : string
+            {
+                return 'identity';
+            }
+
+            public function resolve(string $value, Target $target) : string
+            {
+                return $value;
+            }
         };
     }
 }

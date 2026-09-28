@@ -14,12 +14,12 @@ declare(strict_types=1);
 namespace Tarantool\PhpUnit\Tests\Attribute\Processor;
 
 use PHPUnit\Framework\TestCase;
+use PHPUnitExtras\Attribute\PlaceholderResolver\PlaceholderResolver;
+use PHPUnitExtras\Attribute\Target;
 use Tarantool\Client\Keys;
 use Tarantool\Client\Request\ExecuteRequest;
 use Tarantool\PhpUnit\Attribute\Processor\SqlProcessor;
 use Tarantool\PhpUnit\Attribute\Sql;
-use PHPUnitExtras\Attribute\PlaceholderResolver\PlaceholderResolver;
-use PHPUnitExtras\Attribute\Target;
 use Tarantool\PhpUnit\Client\TestDoubleClient;
 use Tarantool\PhpUnit\Client\TestDoubleFactory;
 
@@ -40,8 +40,15 @@ final class SqlProcessorTest extends TestCase
 
         $processor = new SqlProcessor($mockClient);
         $processor->process(new Sql($sqlStatement), new Target(self::class), new class implements PlaceholderResolver {
-            public function getName() : string { return 'identity'; }
-            public function resolve(string $value, Target $target) : string { return $value; }
+            public function getName() : string
+            {
+                return 'identity';
+            }
+
+            public function resolve(string $value, Target $target) : string
+            {
+                return $value;
+            }
         });
     }
 }
