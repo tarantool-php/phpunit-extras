@@ -20,7 +20,7 @@ use PHPUnitExtras\Attribute\Target;
 use Tarantool\Client\Client;
 use Tarantool\PhpUnit\Attribute\RequiresIfLua;
 
-final class LuaConditionRequirement implements Requirement
+final class IfLuaRequirement implements Requirement
 {
     private Client $client;
 
@@ -39,7 +39,7 @@ final class LuaConditionRequirement implements Requirement
     public function check(ProcessableAttribute $attribute, Target $target, PlaceholderResolver $placeholderResolver) : ?string
     {
         if (!$attribute instanceof RequiresIfLua) {
-            throw new \InvalidArgumentException('LuaConditionRequirement only handles RequiresIfLua attributes');
+            throw new \InvalidArgumentException('IfLuaRequirement only handles RequiresIfLua attributes');
         }
 
         $condition = $placeholderResolver->resolve($attribute->condition, $target);

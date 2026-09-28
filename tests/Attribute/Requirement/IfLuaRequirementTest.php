@@ -17,12 +17,12 @@ use PHPUnit\Framework\TestCase;
 use PHPUnitExtras\Attribute\PlaceholderResolver\PlaceholderResolver;
 use PHPUnitExtras\Attribute\Target;
 use Tarantool\Client\Request\EvaluateRequest;
-use Tarantool\PhpUnit\Attribute\Requirement\LuaConditionRequirement;
+use Tarantool\PhpUnit\Attribute\Requirement\IfLuaRequirement;
 use Tarantool\PhpUnit\Attribute\RequiresIfLua;
 use Tarantool\PhpUnit\Client\TestDoubleClient;
 use Tarantool\PhpUnit\Client\TestDoubleFactory;
 
-final class LuaConditionRequirementTest extends TestCase
+final class IfLuaRequirementTest extends TestCase
 {
     use TestDoubleClient;
 
@@ -37,7 +37,7 @@ final class LuaConditionRequirementTest extends TestCase
             )
             ->build();
 
-        $requirement = new LuaConditionRequirement($mockClient);
+        $requirement = new IfLuaRequirement($mockClient);
 
         self::assertNull($requirement->check(new RequiresIfLua($luaExpression), new Target(self::class), self::resolver()));
     }
@@ -54,7 +54,7 @@ final class LuaConditionRequirementTest extends TestCase
             ->build();
 
         $errorMessage = \sprintf('"%s" is not evaluated to true', $luaExpression);
-        $requirement = new LuaConditionRequirement($mockClient);
+        $requirement = new IfLuaRequirement($mockClient);
 
         self::assertSame($errorMessage, $requirement->check(new RequiresIfLua($luaExpression), new Target(self::class), self::resolver()));
     }
