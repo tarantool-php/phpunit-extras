@@ -57,42 +57,37 @@ Another option is to register an extension called `AttributeExtension`:
 
 ```xml
 <phpunit xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-    xsi:noNamespaceSchemaLocation="vendor/phpunit/phpunit/phpunit.xsd"
+    xsi:noNamespaceSchemaLocation="https://schema.phpunit.de/10.5/phpunit.xsd"
     bootstrap="vendor/autoload.php"
 >
     <!-- ... -->
 
     <extensions>
-        <extension class="Tarantool\PhpUnit\Attribute\AttributeExtension" />
+        <bootstrap class="Tarantool\PhpUnit\Attribute\AttributeExtension" />
     </extensions>
 </phpunit>
 ```
 
 By default, the extension assumes that the Tarantool server you are going to connect to is available on `127.0.0.1:3301`.
 You can customize the default settings by specifying either a [DSN string](https://github.com/tarantool-php/client#dsn-string) or an [array of options](https://github.com/tarantool-php/client#array-of-options)
-as extension configuration values:
+as extension configuration values. PHPUnit 10 passes extension parameters as strings, so use the DSN form for options that require numeric or Boolean values (such as `socket_timeout`):
 
 ```xml
-<extension class="Tarantool\PhpUnit\Attribute\AttributeExtension">
-    <arguments>
-        <string>tcp://127.0.0.1:3301/?socket_timeout=10</string>
-    </arguments>
-</extension>
+<extensions>
+    <bootstrap class="Tarantool\PhpUnit\Attribute\AttributeExtension">
+        <parameter name="dsn" value="tcp://127.0.0.1:3301/?socket_timeout=10" />
+    </bootstrap>
+</extensions>
 ```
 or
 ```xml
-<extension class="Tarantool\PhpUnit\Attribute\AttributeExtension">
-    <arguments>
-        <array>
-            <element key="uri">
-                <string>tcp://127.0.0.1:3301</string>
-            </element>
-            <element key="socket_timeout">
-                <integer>10</integer>
-            </element>
-        </array>
-    </arguments>
-</extension>
+<extensions>
+    <bootstrap class="Tarantool\PhpUnit\Attribute\AttributeExtension">
+        <parameter name="uri" value="tcp://127.0.0.1:3301" />
+        <parameter name="username" value="tester" />
+        <parameter name="password" value="secret" />
+    </bootstrap>
+</extensions>
 ```
 
 On top of that, the configuration values can resolve environment variables,
@@ -100,11 +95,11 @@ which might be useful if you need to share the same settings with a Tarantool
 instance file or any other script:
 
 ```xml
-<extension class="Tarantool\PhpUnit\Attribute\AttributeExtension">
-    <arguments>
-        <string>tcp://%env(TARANTOOL_HOST)%:%env(TARANTOOL_PORT)%</string>
-    </arguments>
-</extension>
+<extensions>
+    <bootstrap class="Tarantool\PhpUnit\Attribute\AttributeExtension">
+        <parameter name="dsn" value="tcp://%env(TARANTOOL_HOST)%:%env(TARANTOOL_PORT)%" />
+    </bootstrap>
+</extensions>
 ```
 
 Once the attributes are configured, you can start using them:
