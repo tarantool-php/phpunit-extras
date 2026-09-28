@@ -131,7 +131,7 @@ final class TestDoubleClientBuilder
             ? $handler->expects(TestCase::exactly($this->shouldBeCalledTimes))->method('handle')
             : $handler->method('handle');
 
-        if ($this->requests) {
+        if (null !== $this->requests) {
             $invocationCount = 0;
             $requests = $this->requests;
             $handleMocker->with(TestCase::callback(static function ($request) use (&$invocationCount, $requests) {
@@ -193,8 +193,6 @@ final class TestDoubleClientBuilder
         return $this->testCase->getMockBuilder($originalClassName)
             ->disableOriginalConstructor()
             ->disableOriginalClone()
-            ->disableArgumentCloning()
-            ->disallowMockingUnknownTypes()
             ->getMock();
     }
 }

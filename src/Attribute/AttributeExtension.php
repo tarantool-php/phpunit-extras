@@ -17,6 +17,7 @@ use PHPUnit\Exception;
 use PHPUnitExtras\Attribute\AttributeExtension as BaseAttributeExtension;
 use Tarantool\Client\Client;
 
+/** @psalm-suppress ClassMustBeFinal This extension is intended to be extended. */
 class AttributeExtension extends BaseAttributeExtension
 {
     use Attributes;

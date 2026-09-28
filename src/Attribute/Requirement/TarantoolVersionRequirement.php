@@ -58,7 +58,7 @@ final class TarantoolVersionRequirement implements Requirement
 
     private function getVersion() : string
     {
-        if ($this->version) {
+        if (null !== $this->version) {
             return $this->version;
         }
 
