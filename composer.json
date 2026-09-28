@@ -1,7 +1,7 @@
 {
     "name": "tarantool/phpunit-extras",
     "description": "A collection of helpers for PHPUnit to ease testing Tarantool libraries.",
-    "keywords": ["tarantool", "phpunit", "annotations", "assertions", "expectations", "extensions", "mocking"],
+    "keywords": ["tarantool", "phpunit", "attributes", "assertions", "expectations", "extensions", "mocking"],
     "type": "library",
     "license": "MIT",
     "authors": [
@@ -12,10 +12,8 @@
     ],
     "require": {
         "php": "^8.2",
-        "composer/package-versions-deprecated": "^1.11",
         "composer/semver": "^3.3",
         "rybakit/phpunit-extras": "dev-feature/php82-phpunit10-attributes-migration",
-        "symfony/expression-language": "^7.0",
         "tarantool/client": "^0.10"
     },
     "require-dev": {

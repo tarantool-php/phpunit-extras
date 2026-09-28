@@ -11,15 +11,19 @@
 
 declare(strict_types=1);
 
-namespace Tarantool\PhpUnit\Annotation\Requirement;
+namespace Tarantool\PhpUnit\Attribute\Requirement;
 
 use Composer\Semver\Semver;
-use PHPUnitExtras\Annotation\Requirement\Requirement;
+use PHPUnitExtras\Attribute\PlaceholderResolver\PlaceholderResolver;
+use PHPUnitExtras\Attribute\ProcessableAttribute;
+use PHPUnitExtras\Attribute\Target;
+use PHPUnitExtras\Attribute\Requirement\Requirement;
+use Tarantool\PhpUnit\Attribute\RequiresTarantoolVersion;
 use Tarantool\Client\Client;
 
 final class TarantoolVersionRequirement implements Requirement
 {
-    private $client;
+    private Client $client;
 
     /** @var string|null */
     private $version;
@@ -30,14 +34,18 @@ final class TarantoolVersionRequirement implements Requirement
     }
 
     #[\Override]
-    public function getName() : string
+    public function getAttributeClass() : string
     {
-        return 'Tarantool';
+        return RequiresTarantoolVersion::class;
     }
 
     #[\Override]
-    public function check(string $value) : ?string
+    public function check(ProcessableAttribute $attribute, Target $target, PlaceholderResolver $placeholderResolver) : ?string
     {
+        if (!$attribute instanceof RequiresTarantoolVersion) {
+            throw new \InvalidArgumentException('TarantoolVersionRequirement only handles RequiresTarantoolVersion attributes');
+        }
+        $value = $placeholderResolver->resolve($attribute->constraint, $target);
         // Replace dash with dot.
         $constraints = (string) preg_replace('/(\d+\.\d+\.\d+)-(\d+)/', '$1.$2', $value);
 
@@ -45,7 +53,7 @@ final class TarantoolVersionRequirement implements Requirement
             return null;
         }
 
-        return \sprintf('%s version %s is required', $this->getName(), $value);
+        return \sprintf('Tarantool version %s is required', $value);
     }
 
     private function getVersion() : string

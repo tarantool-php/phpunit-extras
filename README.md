@@ -10,13 +10,13 @@ It is based on [rybakit/phpunit-extras](https://github.com/rybakit/phpunit-extra
 ## Table of contents
 
  * [Installation](#installation)
- * [Annotations](#annotations)
+ * [Attributes](#attributes)
    * [Processors](#processors)
      * [Lua](#lua)
      * [Sql](#sql)
    * [Requirements](#requirements)
-     * [LuaCondition](#luacondition)
-     * [TarantoolVersion](#tarantoolversion)
+ * [RequiresLuaCondition](#requiresluacondition)
+ * [RequiresTarantoolVersion](#requirestarantoolversion)
  * [Expectations](#expectations)
    * [Requests](#requests)
    * [Prepared statements](#prepared-statements)
@@ -32,10 +32,10 @@ composer require --dev tarantool/phpunit-extras
 ```
 
 
-## Annotations
+## Attributes
 
-Besides the annotations provided by the package `rybakit/phpunit-extras`, the library is shipped
-with annotations specific to Tarantool. The easiest way to enable them is by inheriting your test classes
+Besides the attributes provided by the package `rybakit/phpunit-extras`, the library is shipped
+with attributes specific to Tarantool. The easiest way to enable them is by inheriting your test classes
 from `Tarantool\PhpUnit\TestCase`:
 
 ```php
@@ -53,7 +53,7 @@ final class MyTest extends TestCase
 }
 ```
 
-Another option is to register an extension called `AnnotationExtension`:
+Another option is to register an extension called `AttributeExtension`:
 
 ```xml
 <phpunit xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
@@ -63,7 +63,7 @@ Another option is to register an extension called `AnnotationExtension`:
     <!-- ... -->
 
     <extensions>
-        <extension class="Tarantool\PhpUnit\Annotation\AnnotationExtension" />
+        <extension class="Tarantool\PhpUnit\Attribute\AttributeExtension" />
     </extensions>
 </phpunit>
 ```
@@ -73,7 +73,7 @@ You can customize the default settings by specifying either a [DSN string](https
 as extension configuration values:
 
 ```xml
-<extension class="Tarantool\PhpUnit\Annotation\AnnotationExtension">
+<extension class="Tarantool\PhpUnit\Attribute\AttributeExtension">
     <arguments>
         <string>tcp://127.0.0.1:3301/?socket_timeout=10</string>
     </arguments>
@@ -81,7 +81,7 @@ as extension configuration values:
 ```
 or
 ```xml
-<extension class="Tarantool\PhpUnit\Annotation\AnnotationExtension">
+<extension class="Tarantool\PhpUnit\Attribute\AttributeExtension">
     <arguments>
         <array>
             <element key="uri">
@@ -100,14 +100,14 @@ which might be useful if you need to share the same settings with a Tarantool
 instance file or any other script:
 
 ```xml
-<extension class="Tarantool\PhpUnit\Annotation\AnnotationExtension">
+<extension class="Tarantool\PhpUnit\Attribute\AttributeExtension">
     <arguments>
         <string>tcp://%env(TARANTOOL_HOST)%:%env(TARANTOOL_PORT)%</string>
     </arguments>
 </extension>
 ```
 
-Once the annotations are configured, you can start using them:
+Once the attributes are configured, you can start using them:
 
 ### Processors
 
@@ -118,10 +118,10 @@ Allows executing Lua code before running a test.
 *Example:*
 
 ```php
-/**
- * @lua tube:put('kick_me')
- * @lua tube:bury(0)
- */
+use Tarantool\PhpUnit\Attribute\Lua;
+
+#[Lua("tube:put('kick_me')")]
+#[Lua('tube:bury(0)')]
 public function testKickReleasesBuriedTask() : void
 {
     // ...
@@ -135,11 +135,11 @@ Allows executing SQL statements before running a test (requires Tarantool 2.0+).
 *Example:*
 
 ```php
-/**
- * @sql DROP TABLE IF EXISTS foobar
- * @sql CREATE TABLE foobar (id INTEGER PRIMARY KEY, name VARCHAR(50))
- * @sql INSERT INTO foobar VALUES (1, 'A'), (2, 'B')
- */ 
+use Tarantool\PhpUnit\Attribute\Sql;
+
+#[Sql('DROP TABLE IF EXISTS foobar')]
+#[Sql('CREATE TABLE foobar (id INTEGER PRIMARY KEY, name VARCHAR(50))')]
+#[Sql("INSERT INTO foobar VALUES (1, 'A'), (2, 'B')")]
 public function testExecuteQueryFetchesAllRows() : void
 {
     // ...
@@ -151,50 +151,38 @@ public function testExecuteQueryFetchesAllRows() : void
 
 Requirements allow skipping tests based on preconditions.
 
-#### LuaCondition
-
-*Format:*
-
-```
-@requires luaCondition <condition>
-```
+#### RequiresLuaCondition
 where `<condition>` is an arbitrary lua expression that should be evaluated to a Boolean value.
 
 *Example:*
 
 ```php
-/**
- * @requires luaCondition box.session.user() ~= 'guest'
- */
+use Tarantool\PhpUnit\Attribute\RequiresLuaCondition;
+
+#[RequiresLuaCondition("box.session.user() ~= 'guest'")]
 public function testChangeUserPassword() : void
 {
     // ...
 }
 ```
 
-#### TarantoolVersion
-
-*Format:*
-
-```
-@requires Tarantool <version-constraint>
-```
+#### RequiresTarantoolVersion
 where `<version-constraint>` is a composer-like version constraint. For details on supported formats, 
 please see the Composer [documentation](https://getcomposer.org/doc/articles/versions.md#writing-version-constraints).
 
 *Example:*
 
 ```php
-/**
- * @requires Tarantool ^2.3.2 
- */
+use Tarantool\PhpUnit\Attribute\RequiresTarantoolVersion;
+
+#[RequiresTarantoolVersion('^2.3.2')]
 public function testPrepareCreatesPreparedStatement() : void
 {
     // ...
 }
 ```
 
-> *If you're interested in how to create and register your own annotations and requirements,
+> *If you're interested in how to create and register your own attributes and requirements,
 > please refer to the `rybakit/phpunit-extras` [README](https://github.com/rybakit/phpunit-extras).*
 
 

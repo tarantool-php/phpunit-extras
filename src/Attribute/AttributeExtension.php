@@ -11,15 +11,15 @@
 
 declare(strict_types=1);
 
-namespace Tarantool\PhpUnit\Annotation;
+namespace Tarantool\PhpUnit\Attribute;
 
 use PHPUnit\Exception;
-use PHPUnitExtras\Annotation\AnnotationExtension as BaseAnnotationExtension;
+use PHPUnitExtras\Attribute\AttributeExtension as BaseAttributeExtension;
 use Tarantool\Client\Client;
 
-class AnnotationExtension extends BaseAnnotationExtension
+class AttributeExtension extends BaseAttributeExtension
 {
-    use Annotations;
+    use Attributes;
 
     /** @var array<string, string|int|bool>|string */
     private $clientConfig = 'tcp://127.0.0.1:3301';

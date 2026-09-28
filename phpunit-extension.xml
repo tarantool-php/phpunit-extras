@@ -7,8 +7,8 @@
     <ini name="error_reporting" value="E_ALL"/>
   </php>
   <testsuites>
-    <testsuite name="annotation">
-      <file>tests/Annotation/AnnotationExtensionTest.php</file>
+    <testsuite name="attribute">
+      <file>tests/Attribute/AttributeExtensionTest.php</file>
     </testsuite>
   </testsuites>
   <source>
@@ -17,7 +17,7 @@
     </include>
   </source>
   <extensions>
-    <bootstrap class="Tarantool\PhpUnit\Tests\Annotation\AnnotationExtension">
+    <bootstrap class="Tarantool\PhpUnit\Tests\Attribute\AttributeExtension">
       <parameter name="bool" value="true"/>
       <parameter name="int" value="42"/>
       <parameter name="str" value="foobar"/>

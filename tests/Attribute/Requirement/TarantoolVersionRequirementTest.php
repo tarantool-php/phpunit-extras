@@ -11,12 +11,15 @@
 
 declare(strict_types=1);
 
-namespace Tarantool\PhpUnit\Tests\Annotation\Requirement;
+namespace Tarantool\PhpUnit\Tests\Attribute\Requirement;
 
 use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
 use Tarantool\Client\Request\CallRequest;
-use Tarantool\PhpUnit\Annotation\Requirement\TarantoolVersionRequirement;
+use Tarantool\PhpUnit\Attribute\Requirement\TarantoolVersionRequirement;
+use Tarantool\PhpUnit\Attribute\RequiresTarantoolVersion;
+use PHPUnitExtras\Attribute\PlaceholderResolver\PlaceholderResolver;
+use PHPUnitExtras\Attribute\Target;
 use Tarantool\PhpUnit\Client\TestDoubleClient;
 use Tarantool\PhpUnit\Client\TestDoubleFactory;
 
@@ -35,7 +38,7 @@ final class TarantoolVersionRequirementTest extends TestCase
 
         $requirement = new TarantoolVersionRequirement($mockClient);
 
-        self::assertNull($requirement->check($constraints));
+        self::assertNull($requirement->check(new RequiresTarantoolVersion($constraints), new Target(self::class), self::resolver()));
     }
 
     public static function provideCheckPassesForValidConstraintsData() : iterable
@@ -106,7 +109,7 @@ final class TarantoolVersionRequirementTest extends TestCase
         $requirement = new TarantoolVersionRequirement($mockClient);
         $errorMessage = \sprintf('Tarantool version %s is required', $constraints);
 
-        self::assertSame($errorMessage, $requirement->check($constraints));
+        self::assertSame($errorMessage, $requirement->check(new RequiresTarantoolVersion($constraints), new Target(self::class), self::resolver()));
     }
 
     public static function provideCheckFailsForInvalidConstraintsData() : iterable
@@ -144,5 +147,13 @@ final class TarantoolVersionRequirementTest extends TestCase
             [$v2_3_1_3, '< 2.3'],
             [$v2_3_1_3, '< 2'],
         ];
+    }
+
+    private static function resolver() : PlaceholderResolver
+    {
+        return new class implements PlaceholderResolver {
+            public function getName() : string { return 'identity'; }
+            public function resolve(string $value, Target $target) : string { return $value; }
+        };
     }
 }

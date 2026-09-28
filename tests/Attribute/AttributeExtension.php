@@ -11,13 +11,13 @@
 
 declare(strict_types=1);
 
-namespace Tarantool\PhpUnit\Tests\Annotation;
+namespace Tarantool\PhpUnit\Tests\Attribute;
 
 use Tarantool\Client\Client;
-use Tarantool\PhpUnit\Annotation\AnnotationExtension as BaseAnnotationExtension;
+use Tarantool\PhpUnit\Attribute\AttributeExtension as BaseAttributeExtension;
 use Tarantool\PhpUnit\Client\TestDoubleClientBuilder;
 
-final class AnnotationExtension extends BaseAnnotationExtension
+final class AttributeExtension extends BaseAttributeExtension
 {
     public $resolvedDnsOrOptions;
 

@@ -11,23 +11,23 @@
 
 declare(strict_types=1);
 
-namespace Tarantool\PhpUnit\Tests\Annotation;
+namespace Tarantool\PhpUnit\Tests\Attribute;
 
 use PHPUnit\Framework\TestCase;
-use Tarantool\PhpUnit\Annotation\Attribute\Lua;
+use Tarantool\PhpUnit\Attribute\Lua;
 
-final class AnnotationExtensionTest extends TestCase
+final class AttributeExtensionTest extends TestCase
 {
-    private function bootstrapExtension(string $method, array $parameters = []) : AnnotationExtension
+    private function bootstrapExtension(string $method, array $parameters = []) : AttributeExtension
     {
-        $ext = new AnnotationExtension();
+        $ext = new AttributeExtension();
         $ext->doParseParameters($parameters);
         $ext->processTestAttributes(self::class, $method);
 
         return $ext;
     }
 
-    #[Lua('dummy_code_to_trigger_annotation_processing = true')]
+    #[Lua('dummy_code_to_trigger_attribute_processing = true')]
     public function testConstructorUsesDefaultDsn() : void
     {
         $ext = $this->bootstrapExtension(__FUNCTION__);
@@ -35,7 +35,7 @@ final class AnnotationExtensionTest extends TestCase
         self::assertSame('tcp://127.0.0.1:3301', $ext->resolvedDnsOrOptions);
     }
 
-    #[Lua('dummy_code_to_trigger_annotation_processing = true')]
+    #[Lua('dummy_code_to_trigger_attribute_processing = true')]
     public function testConstructorUsesCustomDsn() : void
     {
         $dsn = 'tcp://tnt_foobar:3302';
@@ -44,7 +44,7 @@ final class AnnotationExtensionTest extends TestCase
         self::assertSame($dsn, $ext->resolvedDnsOrOptions);
     }
 
-    #[Lua('dummy_code_to_trigger_annotation_processing = true')]
+    #[Lua('dummy_code_to_trigger_attribute_processing = true')]
     public function testGetClientConfigNormalizesDsnString() : void
     {
         $hostname = 'tnt_foobar';
@@ -58,7 +58,7 @@ final class AnnotationExtensionTest extends TestCase
         self::assertSame("tcp://$hostname:$port", $ext->resolvedDnsOrOptions);
     }
 
-    #[Lua('dummy_code_to_trigger_annotation_processing = true')]
+    #[Lua('dummy_code_to_trigger_attribute_processing = true')]
     public function testGetClientConfigNormalizesOptionArray() : void
     {
         $hostname = 'tnt_foobar';
