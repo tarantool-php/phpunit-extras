@@ -15,7 +15,7 @@ It is based on [rybakit/phpunit-extras](https://github.com/rybakit/phpunit-extra
      * [Lua](#lua)
      * [Sql](#sql)
    * [Requirements](#requirements)
- * [RequiresLuaCondition](#requiresluacondition)
+ * [RequiresIfLua](#requiresiflua)
  * [RequiresTarantoolVersion](#requirestarantoolversion)
  * [Expectations](#expectations)
    * [Requests](#requests)
@@ -151,15 +151,15 @@ public function testExecuteQueryFetchesAllRows() : void
 
 Requirements allow skipping tests based on preconditions.
 
-#### RequiresLuaCondition
+#### RequiresIfLua
 where `<condition>` is an arbitrary lua expression that should be evaluated to a Boolean value.
 
 *Example:*
 
 ```php
-use Tarantool\PhpUnit\Attribute\RequiresLuaCondition;
+use Tarantool\PhpUnit\Attribute\RequiresIfLua;
 
-#[RequiresLuaCondition("box.session.user() ~= 'guest'")]
+#[RequiresIfLua("box.session.user() ~= 'guest'")]
 public function testChangeUserPassword() : void
 {
     // ...

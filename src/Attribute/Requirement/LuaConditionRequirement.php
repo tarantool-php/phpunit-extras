@@ -18,7 +18,7 @@ use PHPUnitExtras\Attribute\ProcessableAttribute;
 use PHPUnitExtras\Attribute\Requirement\Requirement;
 use PHPUnitExtras\Attribute\Target;
 use Tarantool\Client\Client;
-use Tarantool\PhpUnit\Attribute\RequiresLuaCondition;
+use Tarantool\PhpUnit\Attribute\RequiresIfLua;
 
 final class LuaConditionRequirement implements Requirement
 {
@@ -32,15 +32,16 @@ final class LuaConditionRequirement implements Requirement
     #[\Override]
     public function getAttributeClass() : string
     {
-        return RequiresLuaCondition::class;
+        return RequiresIfLua::class;
     }
 
     #[\Override]
     public function check(ProcessableAttribute $attribute, Target $target, PlaceholderResolver $placeholderResolver) : ?string
     {
-        if (!$attribute instanceof RequiresLuaCondition) {
-            throw new \InvalidArgumentException('LuaConditionRequirement only handles RequiresLuaCondition attributes');
+        if (!$attribute instanceof RequiresIfLua) {
+            throw new \InvalidArgumentException('LuaConditionRequirement only handles RequiresIfLua attributes');
         }
+
         $condition = $placeholderResolver->resolve($attribute->condition, $target);
         [$result] = $this->client->evaluate("return ($condition)");
 

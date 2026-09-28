@@ -16,7 +16,7 @@ namespace Tarantool\PhpUnit\Attribute;
 use PHPUnitExtras\Attribute\ProcessableAttribute;
 
 #[\Attribute(\Attribute::TARGET_CLASS | \Attribute::TARGET_METHOD | \Attribute::IS_REPEATABLE)]
-final class RequiresLuaCondition implements ProcessableAttribute
+final class RequiresIfLua implements ProcessableAttribute
 {
     public function __construct(public readonly string $condition)
     {
