@@ -13,6 +13,7 @@ declare(strict_types=1);
 
 namespace Tarantool\PhpUnit\Tests\Attribute;
 
+use PHPUnit\Runner\Extension\ParameterCollection;
 use Tarantool\Client\Client;
 use Tarantool\PhpUnit\Attribute\AttributeExtension as BaseAttributeExtension;
 use Tarantool\PhpUnit\Client\TestDoubleClientBuilder;
@@ -30,6 +31,6 @@ final class AttributeExtension extends BaseAttributeExtension
 
     public function doParseParameters(array $parameters) : void
     {
-        $this->parseParameters(\PHPUnit\Runner\Extension\ParameterCollection::fromArray($parameters));
+        $this->parseParameters(ParameterCollection::fromArray($parameters));
     }
 }

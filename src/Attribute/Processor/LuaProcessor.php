@@ -41,6 +41,7 @@ final class LuaProcessor implements Processor
         if (!$attribute instanceof Lua) {
             throw new \InvalidArgumentException('LuaProcessor only handles Lua attributes');
         }
+
         $this->client->evaluate($placeholderResolver->resolve($attribute->code, $target));
     }
 }

@@ -14,6 +14,9 @@ declare(strict_types=1);
 namespace Tarantool\PhpUnit\Attribute;
 
 use PHPUnit\Exception;
+use PHPUnit\Runner\Extension\Facade;
+use PHPUnit\Runner\Extension\ParameterCollection;
+use PHPUnit\TextUI\Configuration\Configuration;
 use PHPUnitExtras\Attribute\AttributeExtension as BaseAttributeExtension;
 use Tarantool\Client\Client;
 
@@ -29,13 +32,13 @@ class AttributeExtension extends BaseAttributeExtension
     private $client;
 
     #[\Override]
-    public function bootstrap(\PHPUnit\TextUI\Configuration\Configuration $configuration, \PHPUnit\Runner\Extension\Facade $facade, \PHPUnit\Runner\Extension\ParameterCollection $parameters) : void
+    public function bootstrap(Configuration $configuration, Facade $facade, ParameterCollection $parameters) : void
     {
         $this->parseParameters($parameters);
         parent::bootstrap($configuration, $facade, $parameters);
     }
 
-    protected function parseParameters(\PHPUnit\Runner\Extension\ParameterCollection $parameters) : void
+    protected function parseParameters(ParameterCollection $parameters) : void
     {
         if ($parameters->has('dsn')) {
             $this->clientConfig = $parameters->get('dsn');
@@ -43,10 +46,10 @@ class AttributeExtension extends BaseAttributeExtension
             $closure = \Closure::bind(function () {
                 /**
                  * @psalm-suppress InaccessibleProperty
-                 * @var \PHPUnit\Runner\Extension\ParameterCollection $this
+                 * @var ParameterCollection $this
                  */
                 return $this->parameters;
-            }, $parameters, \PHPUnit\Runner\Extension\ParameterCollection::class);
+            }, $parameters, ParameterCollection::class);
             $options = $closure ? $closure() : [];
 
             if ([] !== $options) {

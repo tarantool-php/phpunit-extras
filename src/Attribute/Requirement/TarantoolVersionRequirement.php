@@ -45,6 +45,7 @@ final class TarantoolVersionRequirement implements Requirement
         if (!$attribute instanceof RequiresTarantoolVersion) {
             throw new \InvalidArgumentException('TarantoolVersionRequirement only handles RequiresTarantoolVersion attributes');
         }
+
         $value = $placeholderResolver->resolve($attribute->constraint, $target);
         // Replace dash with dot.
         $constraints = (string) preg_replace('/(\d+\.\d+\.\d+)-(\d+)/', '$1.$2', $value);

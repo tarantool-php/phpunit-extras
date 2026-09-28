@@ -41,6 +41,7 @@ final class SqlProcessor implements Processor
         if (!$attribute instanceof Sql) {
             throw new \InvalidArgumentException('SqlProcessor only handles Sql attributes');
         }
+
         $this->client->executeUpdate($placeholderResolver->resolve($attribute->code, $target));
     }
 }
