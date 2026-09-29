@@ -75,11 +75,13 @@ final class RequestCountContext implements ExpressionContext
         return new self($client, $requestCounter, $requestName, "new_count <= old_count + $count");
     }
 
+    #[\Override]
     public function getExpression() : string
     {
         return $this->expression;
     }
 
+    #[\Override]
     public function getValues() : array
     {
         if (null === $this->finalValue) {

@@ -11,21 +11,23 @@
 
 declare(strict_types=1);
 
-namespace Tarantool\PhpUnit\Tests\Annotation\Requirement;
+namespace Tarantool\PhpUnit\Tests\Attribute\Requirement;
 
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
+use PHPUnitExtras\Attribute\PlaceholderResolver\PlaceholderResolver;
+use PHPUnitExtras\Attribute\Target;
 use Tarantool\Client\Request\CallRequest;
-use Tarantool\PhpUnit\Annotation\Requirement\TarantoolVersionRequirement;
+use Tarantool\PhpUnit\Attribute\Requirement\TarantoolRequirement;
+use Tarantool\PhpUnit\Attribute\RequiresTarantool;
 use Tarantool\PhpUnit\Client\TestDoubleClient;
 use Tarantool\PhpUnit\Client\TestDoubleFactory;
 
-final class TarantoolVersionRequirementTest extends TestCase
+final class TarantoolRequirementTest extends TestCase
 {
     use TestDoubleClient;
 
-    /**
-     * @dataProvider provideCheckPassesForValidConstraintsData()
-     */
+    #[DataProvider('provideCheckPassesForValidConstraintsData')]
     public function testCheckPassesForValidConstraints(string $serverVersion, string $constraints) : void
     {
         $mockClient = $this->getTestDoubleClientBuilder()
@@ -34,12 +36,12 @@ final class TarantoolVersionRequirementTest extends TestCase
                 TestDoubleFactory::createResponseFromData([['version' => $serverVersion]]))
             ->build();
 
-        $requirement = new TarantoolVersionRequirement($mockClient);
+        $requirement = new TarantoolRequirement($mockClient);
 
-        self::assertNull($requirement->check($constraints));
+        self::assertNull($requirement->check(new RequiresTarantool($constraints), new Target(self::class), self::resolver()));
     }
 
-    public function provideCheckPassesForValidConstraintsData() : iterable
+    public static function provideCheckPassesForValidConstraintsData() : iterable
     {
         $v2_3_1_3 = '2.3.1-3-g878e2a42c';
 
@@ -95,9 +97,7 @@ final class TarantoolVersionRequirementTest extends TestCase
         ];
     }
 
-    /**
-     * @dataProvider provideCheckFailsForInvalidConstraintsData()
-     */
+    #[DataProvider('provideCheckFailsForInvalidConstraintsData')]
     public function testCheckFailsForInvalidConstraints(string $serverVersion, string $constraints) : void
     {
         $mockClient = $this->getTestDoubleClientBuilder()
@@ -106,13 +106,13 @@ final class TarantoolVersionRequirementTest extends TestCase
                 TestDoubleFactory::createResponseFromData([['version' => $serverVersion]]))
             ->build();
 
-        $requirement = new TarantoolVersionRequirement($mockClient);
-        $errorMessage = sprintf('Tarantool version %s is required', $constraints);
+        $requirement = new TarantoolRequirement($mockClient);
+        $errorMessage = \sprintf('Tarantool version %s is required', $constraints);
 
-        self::assertSame($errorMessage, $requirement->check($constraints));
+        self::assertSame($errorMessage, $requirement->check(new RequiresTarantool($constraints), new Target(self::class), self::resolver()));
     }
 
-    public function provideCheckFailsForInvalidConstraintsData() : iterable
+    public static function provideCheckFailsForInvalidConstraintsData() : iterable
     {
         $v2_3_1_3 = '2.3.1-3-g878e2a42c';
 
@@ -147,5 +147,20 @@ final class TarantoolVersionRequirementTest extends TestCase
             [$v2_3_1_3, '< 2.3'],
             [$v2_3_1_3, '< 2'],
         ];
+    }
+
+    private static function resolver() : PlaceholderResolver
+    {
+        return new class implements PlaceholderResolver {
+            public function getName() : string
+            {
+                return 'identity';
+            }
+
+            public function resolve(string $value, Target $target) : string
+            {
+                return $value;
+            }
+        };
     }
 }

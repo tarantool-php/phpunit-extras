@@ -25,6 +25,7 @@ final class RequestCounter implements Middleware
      */
     private $requestCount = [];
 
+    #[\Override]
     public function process(Request $request, Handler $handler) : Response
     {
         $response = $handler->handle($request);

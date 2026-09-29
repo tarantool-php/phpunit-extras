@@ -14,13 +14,13 @@ declare(strict_types=1);
 namespace Tarantool\PhpUnit;
 
 use PHPUnitExtras\TestCase as BaseTestCase;
-use Tarantool\PhpUnit\Annotation\Annotations;
+use Tarantool\PhpUnit\Attribute\Attributes;
 use Tarantool\PhpUnit\Client\TestDoubleClient;
 use Tarantool\PhpUnit\Expectation\Expectations;
 
 abstract class TestCase extends BaseTestCase
 {
-    use Annotations;
+    use Attributes;
     use Expectations;
     use TestDoubleClient;
 }

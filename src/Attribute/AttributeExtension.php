@@ -11,30 +11,54 @@
 
 declare(strict_types=1);
 
-namespace Tarantool\PhpUnit\Annotation;
+namespace Tarantool\PhpUnit\Attribute;
 
 use PHPUnit\Exception;
-use PHPUnitExtras\Annotation\AnnotationExtension as BaseAnnotationExtension;
+use PHPUnit\Runner\Extension\Facade;
+use PHPUnit\Runner\Extension\ParameterCollection;
+use PHPUnit\TextUI\Configuration\Configuration;
+use PHPUnitExtras\Attribute\AttributeExtension as BaseAttributeExtension;
 use Tarantool\Client\Client;
 
-class AnnotationExtension extends BaseAnnotationExtension
+/** @psalm-suppress ClassMustBeFinal This extension is intended to be extended. */
+class AttributeExtension extends BaseAttributeExtension
 {
-    use Annotations;
+    use Attributes;
 
     /** @var array<string, string|int|bool>|string */
-    private $clientConfig;
+    private $clientConfig = 'tcp://127.0.0.1:3301';
 
     /** @var Client|null */
     private $client;
 
-    /**
-     * @param array<string, string|int|bool>|string $clientConfig
-     */
-    public function __construct($clientConfig = 'tcp://127.0.0.1:3301')
+    #[\Override]
+    public function bootstrap(Configuration $configuration, Facade $facade, ParameterCollection $parameters) : void
     {
-        $this->clientConfig = $clientConfig;
+        $this->parseParameters($parameters);
+        parent::bootstrap($configuration, $facade, $parameters);
     }
 
+    protected function parseParameters(ParameterCollection $parameters) : void
+    {
+        if ($parameters->has('dsn')) {
+            $this->clientConfig = $parameters->get('dsn');
+        } else {
+            $closure = \Closure::bind(function () {
+                /**
+                 * @psalm-suppress InaccessibleProperty
+                 * @var ParameterCollection $this
+                 */
+                return $this->parameters;
+            }, $parameters, ParameterCollection::class);
+            $options = $closure ? $closure() : [];
+
+            if ([] !== $options) {
+                $this->clientConfig = $options;
+            }
+        }
+    }
+
+    #[\Override]
     protected function getClient() : Client
     {
         if ($this->client) {
@@ -71,12 +95,12 @@ class AnnotationExtension extends BaseAnnotationExtension
 
     private static function resolveEnvValues(string $configValue) : string
     {
-        return preg_replace_callback('/%env\((?P<name>.+?)\)%/', static function (array $matches) : string {
+        return (string) preg_replace_callback('/%env\((?P<name>.+?)\)%/', static function (array $matches) : string {
             if (false !== $value = getenv($matches['name'])) {
                 return $value;
             }
 
-            $errorMessage = sprintf('Environment variable "%s" does not exist', $matches['name']);
+            $errorMessage = \sprintf('Environment variable "%s" does not exist', $matches['name']);
             throw new class($errorMessage) extends \RuntimeException implements Exception { };
         }, $configValue);
     }

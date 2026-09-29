@@ -52,11 +52,13 @@ final class PreparedStatementCountContext implements ExpressionContext
         return new self($client, "new_count <= old_count + $count");
     }
 
+    #[\Override]
     public function getExpression() : string
     {
         return $this->expression;
     }
 
+    #[\Override]
     public function getValues() : array
     {
         if (null === $this->finalValue) {
