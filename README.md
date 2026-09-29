@@ -4,7 +4,7 @@
 [![Telegram](https://img.shields.io/badge/Telegram-join%20chat-blue.svg)](https://t.me/tarantool_php)
 
 A collection of helpers for [PHPUnit](https://phpunit.de/) to ease testing [Tarantool](https://www.tarantool.io/en/developers/) libraries.
-It is based on [rybakit/phpunit-extras](https://github.com/rybakit/phpunit-extras), please refer to this package for more documentation.
+It is based on [rybakit/phpunit-extras](https://github.com/rybakit/phpunit-extras). Please refer to that package for further documentation.
 
 
 ## Table of contents
@@ -34,7 +34,7 @@ composer require --dev tarantool/phpunit-extras
 
 ## Attributes
 
-Besides the attributes provided by the package `rybakit/phpunit-extras`, the library is shipped
+Besides the attributes provided by the package `rybakit/phpunit-extras`, the library includes
 with attributes specific to Tarantool. The easiest way to enable them is by inheriting your test classes
 from `Tarantool\PhpUnit\TestCase`:
 
@@ -68,7 +68,7 @@ Another option is to register an extension called `AttributeExtension`:
 </phpunit>
 ```
 
-By default, the extension assumes that the Tarantool server you are going to connect to is available on `127.0.0.1:3301`.
+By default, the extension assumes that the Tarantool server you want to connect to is available on `127.0.0.1:3301`.
 You can customize the default settings by specifying either a [DSN string](https://github.com/tarantool-php/client#dsn-string) or an [array of options](https://github.com/tarantool-php/client#array-of-options)
 as extension configuration values. PHPUnit 10 passes extension parameters as strings, so use the DSN form for options that require numeric or Boolean values (such as `socket_timeout`):
 
@@ -90,7 +90,7 @@ or
 </extensions>
 ```
 
-On top of that, the configuration values can resolve environment variables,
+Configuration values can also reference environment variables,
 which might be useful if you need to share the same settings with a Tarantool
 instance file or any other script:
 
@@ -123,7 +123,7 @@ public function testKickReleasesBuriedTask() : void
 }
 ```
 
-#### Sql
+#### SQL
 
 Allows executing SQL statements before running a test (requires Tarantool 2.0+).
 
@@ -147,7 +147,7 @@ public function testExecuteQueryFetchesAllRows() : void
 Requirements allow skipping tests based on preconditions.
 
 #### RequiresIfLua
-where `<condition>` is an arbitrary lua expression that should be evaluated to a Boolean value.
+Here, `<condition>` is an arbitrary Lua expression that should evaluate to a Boolean value.
 
 *Example:*
 
@@ -162,7 +162,7 @@ public function testChangeUserPassword() : void
 ```
 
 #### RequiresTarantool
-where `<version-constraint>` is a composer-like version constraint. For details on supported formats, 
+Here, `<version-constraint>` uses a version constraint format similar to Composer's. For details on supported formats,
 please see the Composer [documentation](https://getcomposer.org/doc/articles/versions.md#writing-version-constraints).
 
 *Example:*
@@ -267,15 +267,15 @@ public function testCloseDeallocatesPreparedStatement() : void
 }
 ```
 
-To enable all the above expectation methods in one go, use the `Tarantool\PhpUnit\Expectation\Expectations` trait,
+To enable all the expectation methods above at once, use the `Tarantool\PhpUnit\Expectation\Expectations` trait,
 or extend the `Tarantool\PhpUnit\TestCase` class.
 
 
 ## Mocking
 
-The library provides several helper classes to create test doubles for the [Tarantool Сlient](https://github.com/tarantool-php/client)
-to avoid sending real requests to the Tarantool server. For the convenience of creating such objects,
-add the trait `TestDoubleClient` to your test class:
+The library provides several helper classes to create test doubles for the [Tarantool Client](https://github.com/tarantool-php/client)
+to avoid sending real requests to the Tarantool server. To make these objects easier to create,
+add the `TestDoubleClient` trait to your test class:
 
 ```php
 use PHPUnit\Framework\TestCase;
