@@ -13,7 +13,7 @@
     "require": {
         "php": "^8.2",
         "composer/semver": "^3.3",
-        "rybakit/phpunit-extras": "dev-feature/php82-phpunit10-attributes-migration",
+        "rybakit/phpunit-extras": "^0.3.0",
         "symfony/expression-language": "^7.0",
         "tarantool/client": "^0.10"
     },
@@ -38,11 +38,5 @@
         },
         "sort-packages": true
     },
-    "minimum-stability": "dev",
-    "prefer-stable": true,
-    "repositories": [{
-        "type": "vcs",
-        "url": "https://github.com/rybakit/phpunit-extras",
-        "no-api": true
-    }]
+    "prefer-stable": true
 }
